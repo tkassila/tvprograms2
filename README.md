@@ -43,7 +43,7 @@ Ohjelmataulukko
 7. Select Yle, Telkku, Amppari etc program sources and select a date html link to choose a date of programs to show
 8. You can control to how loaded programs are shown and search text from programs data etc 
 
-Super performant `Material` app for preact world using [preact-material-components](https://github.com/prateekbh/preact-material-components)
+Super performant app for preact world without material components, only omit dialog is used. That and another library changes are meaning almost half app size!
 
 V. 1.5 has been updated. That is more updated software: preact-cli 3.3.3 and preact 10.6.4.
 
@@ -63,7 +63,7 @@ npm run build
 npm run serve
 ```
 For detailed explanation on how things work, checkout the [CLI Readme](https://github.com/developit/preact-cli/blob/master/README.md).
-Super performant `Material` app for preact world using [preact-material-components](https://github.com/prateekbh/preact-material-components)
+
 # build for production with minification
 npm run build
 
