@@ -1,0 +1,28 @@
+.home {
+	padding: 20px;
+	min-height: 100%;
+	width: 100%;
+}
+
+.cardHeader {
+  padding: 16px;
+  width: 100%;
+}
+
+.cardBody {
+  padding: 16px;
+  width: 100%;
+}
+
+
+section{  
+	border:1px solid pink;  
+	padding:15px;  
+	margin:10px;  
+	}  
+  
+  span {  
+	  margin-right: 15px;  
+    margin-bottom: 5px;
+  }  
+	

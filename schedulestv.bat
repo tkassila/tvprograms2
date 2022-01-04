@@ -1,0 +1,1 @@
+curl -XGET "https://external.api.yle.fi/v1/programs/schedules.json?app_id=8547bc30&app_key=1949f194cce1b4c18b85a93f22a52150&service=yle-tv1&starttime=2021-03-10T00:00:01.000Z&endtime=2021-03-10T23:59:59.000Z&offset=0"
