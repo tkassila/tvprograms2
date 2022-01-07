@@ -327,7 +327,7 @@ export default class YleHtml extends Component {
 		let isFirefox = this.state.isbrowser.isFirefox;
 		if (Config.bDebug)
 		{
-			console.log("firefox");
+			console.log("firefox 2");
 			console.log(isFirefox);
 		}
 		if (Config.bDebug)

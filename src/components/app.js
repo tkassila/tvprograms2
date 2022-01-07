@@ -62,7 +62,7 @@ export default class App extends Component {
 			yleapiparams: '?app_id=' +Config.yleapi +"&app_key=" +Config.ylekey,
 			currentUrl: '/amppari',
 			currentProgsourceCntrl: null,
-			themevalue: '--dark',
+			themevalue: '',
 			componentDidMount: false
 		}
 
@@ -82,7 +82,6 @@ export default class App extends Component {
 		Config.setOwnserveraddress(location.hostname, location.host);
 		IsBrowser.whichBrowser();
 		this.store = store;
-		store.setState({ isbrowser: IsBrowser, darkstyle: '' });
 
 		if (Config.bDebug)
 		{
@@ -98,7 +97,9 @@ export default class App extends Component {
 			console.log("Isbrowser.isBlink:");
 			console.log(IsBrowser.isBlink);
 		}
-		
+
+		store.setState({ isbrowser: IsBrowser, darkstyle: '' });
+
 		console.log("Config");
 		// console.log(Config);
 
@@ -242,10 +243,10 @@ export default class App extends Component {
 
 	themeChange = (themevalue) =>
 	{
-		/*
 		if (themevalue != undefined)
 		{
-			*/
+			this.setState({ themevalue: themevalue });
+
 			if (Config.bDebug)
 			{
 				console.log("themevalue");
@@ -253,37 +254,98 @@ export default class App extends Component {
 			}
 			if (themevalue.trim() == '')
 			{
-//				import('./App.css');
-				import('./AppBackgroundWhite.css');
-			//	document.body.style.display = "background-color: white; min-height: 100%;";
-			    // document.html.style.display = "background-color: white;";
+		//		import('./App.css');
+				// documen.body.style.display = "background-color: white; color: black";
+			//	import('./AppBackgroundWhite.css');
+
+//				import('../style');
+			    // ument.html.style.display = "background-color: white;";
 			}
 			else			
 			{
 //				import('./App.css');
-				import('./AppBackgroundBlack.css');
+				// document.body.style.display = "background-color: black<; ; color: white";
+			//	import('./AppBackgroundBlack.css');
 			//	document.body.style.display = "background-color: green; min-height: 100%;";
 				// document.html.style.display = "background-color: black;";
 			}
-/*		}
-		*/
-		this.setState({ themevalue: themevalue });
+		}
+//		this.setState({ themevalue: themevalue });
 	}
+
+	/*
+	getImportTelkkuRoute = () =>
+	{
+		// import('../routes/telkku/TelkkuRoute');
+		return <TelkkuRoute path="/telkku" store={store}
+		   ref={this.ctrlTelkkuRef}
+		   themevalue={this.state.themevalue} /> ;
+	}
+
+	getImportYleRoute = () =>
+	{
+		// import('../routes/yle/YleRoute');
+		return <YleRoute path="/" store={store} ref={this.ctrlYleRef} 
+			themevalue={this.state.themevalue} /> ;
+	}
+
+	getImportAmppariRoute = () =>
+	{
+		// import('../routes/amppari/AmppariRoute');
+		return <AmppariRoute path="/amppari" store={store}
+				ref={this.ctrlAmppariRef} 
+				themevalue={this.state.themevalue}/> ;
+	}
+
+	getImportHtmlTelkkuRoute = () =>
+	{
+		// import('../routes/telkkuhtml/HtmlTelkkuRoute');
+		return <HtmlTelkkuRoute path="/htmltelkku" store={store}
+				ref={this.ctrlHtmlAmppariRef}
+				themevalue={this.state.themevalue} /> ;
+	}
+
+	getImportHtmlAmppariRoute = () =>
+	{
+		// import('../routes/ampparihtml/HtmlAmppariRoute');
+		return <HtmlAmppariRoute path="/htmlamppari" store={store}
+				ref={this.ctrlHtmlAmppariRef}
+				themevalue={this.state.themevalue} /> ;
+	}
+	*/
 
 	render(props, state) {
 
 		console.log("start App.js render");
-
+		
 		const darkstyle = state.themevalue;
-		let divDialogStyle = (state.themevalue !== undefined && state.themevalue !== '' ? "color: #FFF; background-color: black; border-color: #FFF;" : '');
+		let divDialogStyle = (state.themevalue !== undefined && state.themevalue !== '' ? "color: #FFF; background-color: black; border-color: #FFF;" : "color: black; background-color: white; border-color: #FFF;");
 
 		// 			<Typography body1>
+
+		/*
+		let cntrlRoute = null;
+		if (state.currentUrl && state.currentUrl === '/telkku')
+			cntrlRoute = this.getImportTelkkuRoute();
+		else
+		if (state.currentUrl && state.currentUrl === '/')
+			cntrlRoute = this.getImportYleRoute();
+		else
+		if (state.currentUrl && state.currentUrl === '/amppari')
+			cntrlRoute = this.getImportAmppariRoute();
+		else
+		if (state.currentUrl && state.currentUrl === '/htmltelkku')
+			cntrlRoute = this.getImportHtmlTelkkuRoute();
+		else
+		if (state.currentUrl && state.currentUrl === '/htmlamppari')
+			cntrlRoute = this.getImportHtmlAmppariRoute();
+		*/
 
 		console.log("start App.js render 2");
 
 		return (			
 			<Provider store={store}>
-			<div id="app" style={"  margin:0px; height:100%; height:100%; " +divDialogStyle}>
+			<div id="app" style={"  margin:0px; height:100%; min-height:100%;min-height:100%; height:100%; " +divDialogStyle}>
 			<Header selectedRoute={state.currentUrl} store={store}
 				  currentProgsourceCntrl={state.currentProgsourceCntrl}
 				  themeChange={this.themeChange} />
@@ -323,29 +385,39 @@ export default class App extends Component {
 }
 
 /*
-	<Header selectedRoute={state.currentUrl} store={store}
+	<Provider store={store}>
+			<div id="app" style={"  margin:0px; height:100%; height:100%; " +divDialogStyle}>
+			<Header selectedRoute={state.currentUrl} store={store}
 				  currentProgsourceCntrl={state.currentProgsourceCntrl}
 				  themeChange={this.themeChange} />
-			<Router onChange={this.handleRoute}>
-				<Router onChange={this.handleRoute}>
-			   	  <TelkkuRoute path="/telkku" store={store}
+		
+			<Router matcher={multipathMatcher}>
+			<Route path={["/telkku"]}>	
+			        <TelkkuRoute path="/telkku" store={store}
 					   ref={this.ctrlTelkkuRef}
 					   themevalue={state.themevalue} />
-			      <YleRoute path="/" store={store} ref={this.ctrlYleRef} 
+			 </Route>	
+			 <Route path={["/"]}>	
+				 <YleRoute path="/" store={store} ref={this.ctrlYleRef} 
 					 themevalue={state.themevalue} />
-					<AmppariRoute path="/amppari" store={store}
+			 </Route>	
+			 <Route path={["/amppari"]}>	
+				 <AmppariRoute path="/amppari" store={store}
 					   ref={this.ctrlAmppariRef} 
 					   themevalue={state.themevalue}/>
-				  <HtmlTelkkuRoute path="/htmltelkku" store={store}
+			 </Route>	
+			 <Route path={["/htmltelkku"]}>	
+				 <HtmlTelkkuRoute path="/htmltelkku" store={store}
 					   ref={this.ctrlHtmlAmppariRef}
 					   themevalue={state.themevalue} />	
-				  <HtmlAmppariRoute path="/htmlamppari" store={store}
+			 </Route>	
+			 <Route path={["/htmlamppari"]}>	
+				 <HtmlAmppariRoute path="/htmlamppari" store={store}
 					   ref={this.ctrlHtmlAmppariRef}
 					   themevalue={state.themevalue} />
-
-					<Profile path="/profile/" user="me" />
-					<Profile path="/profile/:user" />
-					<NotFound default />
-				</Router>	
-
+			 </Route>	
+				</Router>
+				</div>
+			
+			</Provider>
 */
