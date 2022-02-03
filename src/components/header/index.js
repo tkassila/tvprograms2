@@ -1,4 +1,4 @@
-import { h, Component, Fragment, createRef } from 'preact';
+import { h, Component, Fragment, createRef } from "preact";
 // import { route } from 'preact-router';
 import { Link } from "wouter-preact";
 /*
@@ -19,55 +19,51 @@ import { Link } from "wouter-preact";
 // import Button from 'preact-material-components/Button';
 // import 'preact-material-components/Button/style.css';
 */
-import Media from '../../utils/Media';
+import Media from "../../utils/Media";
 // import { Link } from 'preact-router/match';
 
-import Config from '../../utils/Config';
+import Config from "../../utils/Config";
 
-import style from './style';
+import style from "./style";
 
 export default class Header extends Component {
+  store = null;
+  // switchChange = null;
+  // _underSwitchChange = false;
 
-	store = null;
-	// switchChange = null;
-	// _underSwitchChange = false;
+  constructor(props) {
+    super(props);
+    if (Config.bDebug) {
+      if (Config.bDebug) console.log("Header.js");
+      if (Config.bDebug) console.log(props);
+    }
 
-	constructor(props)
-	{
-		super(props);
-		if(Config.bDebug) 
-		{
-			if(Config.bDebug)
-			console.log("Header.js");										
-			if(Config.bDebug)
-			console.log(props);
-		}
+    this.store = props.store;
 
-		this.store = props.store;
+    this.state = {
+      darkThemeEnabled: false,
+      darkstyle: "--dark",
+      progsource: "radio_yle",
+    };
 
-		this.state = {
-			darkThemeEnabled: false,
-			darkstyle: '--dark',
-			progsource: 'radio_yle',
-		};
+    //  this._underSwitchChange = false;
+    //	this.switchChange = createRef();
+  }
 
-	//  this._underSwitchChange = false;
-	//	this.switchChange = createRef();
-	}
+  componentDidMount() {
+    // if (Media.screen.isTabbletOrMobile_1224)
+    if (
+      Media.screen.isSmartPhone_portrait ||
+      Media.screen.isSmartPhone_landskape
+    ) {
+      // console.log("kissa-1");
+      // this.toggleDarkTheme();
+    }
+    // console.log("kissa-2");
+    //		goHome();
+  }
 
-	componentDidMount()
-	{
-				// if (Media.screen.isTabbletOrMobile_1224)
-		if (Media.screen.isSmartPhone_portrait || Media.screen.isSmartPhone_landskape)
-		{
-			 console.log("kissa-1");
-			// this.toggleDarkTheme();
-		}		
-		console.log("kissa-2");
-//		goHome();
-	}
-
-	/*
+  /*
 	closeDrawer() {
 		this.drawer.MDComponent.open = false;	
 	}
@@ -80,34 +76,33 @@ export default class Header extends Component {
 	dialogRef = dialog => (this.dialog = dialog);
 	*/
 
-	linkTo = path => () => {
-		if (path === undefined || path == null)
-			return;
-	//	route(path);
-		this.closeDrawer();
-	};
+  linkTo = (path) => () => {
+    if (path === undefined || path == null) return;
+    //	route(path);
+    this.closeDrawer();
+  };
 
-	goHome = this.linkTo('/');
-//	goToMyProfile = this.linkTo('/profile');
+  goHome = this.linkTo("/");
+  //	goToMyProfile = this.linkTo('/profile');
 
-	toggleDarkTheme = () => {
-	//	if (this._underSwitchChange)
-	//		return true;
+  toggleDarkTheme = () => {
+    //	if (this._underSwitchChange)
+    //		return true;
 
-			// document.body.style = 'max-height: 100%; background-color: red; height: 100vh';
+    // document.body.style = 'max-height: 100%; background-color: red; height: 100vh';
 
-		this.setState(
-			{
-				darkThemeEnabled: !this.state.darkThemeEnabled
-			},
-			() => {
-				if (this.state.darkThemeEnabled) {
-					document.body.classList.add('mdc-theme--dark');
-					this.store.setState({ "darkstyle" : '--dark' });
-					this.props.themeChange('--dark');
-					import('../AppBackgroundBlack.css');
-					//document.body.style = " background-color: red; ";
-					/*
+    this.setState(
+      {
+        darkThemeEnabled: !this.state.darkThemeEnabled,
+      },
+      () => {
+        if (this.state.darkThemeEnabled) {
+          document.body.classList.add("mdc-theme--dark");
+          this.store.setState({ darkstyle: "--dark" });
+          this.props.themeChange("--dark");
+          import("../AppBackgroundBlack.css");
+          //document.body.style = " background-color: red; ";
+          /*
 					if (this.switchChange && this.switchChange.current 
 						&& !this.switchChange.current.checked)
 					{
@@ -116,12 +111,11 @@ export default class Header extends Component {
 						this._underSwitchChange = false;
 					}
 					*/
-				}
-				else {
-					document.body.classList.remove('mdc-theme--dark');
-					this.store.setState({ "darkstyle" : '' });
-					this.props.themeChange('');
-					/*
+        } else {
+          document.body.classList.remove("mdc-theme--dark");
+          this.store.setState({ darkstyle: "" });
+          this.props.themeChange("");
+          /*
 					if (this.switchChange && this.switchChange.current 
 						&& this.switchChange.current.checked)
 					{
@@ -130,130 +124,167 @@ export default class Header extends Component {
 						this._underSwitchChange = false;
 					}
 					*/
-				}
-			}
-		);
-	}
+        }
+      }
+    );
+  };
 
-	getPathOfRadioProgSourceChanged = (id) =>
-	{
+  getPathOfRadioProgSourceChanged = (id) => {
+    let ret = null;
+    switch (id) {
+      case "radio_yle":
+        ret = "/";
+        break;
+      case "radio_telkku":
+        ret = "/telkku";
+        break;
+      case "radio_telkkuhtml":
+        ret = "/htmltelkku";
+        break;
+      case "radio_amppari":
+        ret = "/amppari";
+        break;
+      case "radio_htmlamppari":
+        ret = "/htmlamppari";
+        break;
+      default:
+        ret = "/yle";
+        break;
+    }
+    return ret;
+  };
 
-		let ret = null;
-		switch(id)
-		{
-			case 'radio_yle': ret = "/"; break;
-			case 'radio_telkku': ret = '/telkku'; break;
-			case 'radio_telkkuhtml': ret = '/htmltelkku'; break;
-			case 'radio_amppari': ret = '/amppari'; break;
-			case 'radio_htmlamppari': ret = '/htmlamppari'; break;	
-			default: ret = '/yle'; break;
-			}  
-		return ret;
-	}
+  radioProgSourceChanged = (event) => {
+    // event.preventDefault();
+    //		if (!this.state.bCategoryQueryReady)
+    //			return;
+    var currentCheckedRadio = event.target;
+    var name = currentCheckedRadio.name;
+    if (Config.bDebug) {
+      console.log("currentCheckedRadio");
+      console.log(name);
+    }
+    if (name == "") return;
+    if (name !== "optsource") return;
+    var id = currentCheckedRadio.id;
+    if (Config.bDebug) {
+      console.log("currentCheckedRadio");
+      console.log(id);
+    }
+    // if (this.props.currentProgsourceCntrl)
+    //this.props.currentProgsourceCntrl.removelisteners();
+    this.props.store.setState({ progsource: id });
+    this.setState({ progsource: id });
+    let strId = null;
+    if (id !== undefined || id !== null) {
+      strId = this.getPathOfRadioProgSourceChanged(id);
+      if (strId !== undefined || strId !== null)
+        // route(strId);
+        this.store.setState({ newlocation: strId });
+    }
+  };
 
-	radioProgSourceChanged = (event) => 
-	{
-		// event.preventDefault();
-//		if (!this.state.bCategoryQueryReady)
-//			return;
-		var currentCheckedRadio = event.target;
-        var name = currentCheckedRadio.name;
-		if (Config.bDebug)
-		{	
-			console.log("currentCheckedRadio");
-			console.log(name);
-		}
-		if (name == '') return;
-        if (name !== 'optsource') return;
-        var id = currentCheckedRadio.id;
-		if (Config.bDebug)
-		{	
-			console.log("currentCheckedRadio");
-			console.log(id);
-		}
-		// if (this.props.currentProgsourceCntrl)
-			//this.props.currentProgsourceCntrl.removelisteners();
-		this.props.store.setState({ progsource: id });
-		this.setState({ progsource: id });
-		let strId = null;
-		if (id !== undefined || id !== null)
-		{
-			strId = this.getPathOfRadioProgSourceChanged(id)
-			if (strId !== undefined || strId !== null)
-				// route(strId);
-				this.store.setState({ newlocation:  strId});
-		}
-	}
+  linkClicked = (event) => {
+    // event.preventDefault();
+    //		if (!this.state.bCategoryQueryReady)
+    //			return;
+    if (event == undefined || event == null) return;
+    var currentCheckedRadio = event.target;
+    var name = currentCheckedRadio.name;
+    if (Config.bDebug) {
+      console.log("clicked link name:");
+      console.log(name);
+    }
+    // if (name == '') return;
+    // if (name !== 'optsource') return;
+    var id = currentCheckedRadio.id;
+    if (Config.bDebug) {
+      console.log("clicked link id");
+      console.log(id);
+    }
+    var href = currentCheckedRadio.href;
+    if (Config.bDebug) {
+      console.log("clicked link href");
+      console.log(href);
+    }
+    // if (this.props.currentProgsourceCntrl)
+    //this.props.currentProgsourceCntrl.removelisteners();
+    this.props.store.setState({ progsource: id });
+    this.setState({ progsource: id });
+    let uri = this.getPathOfRadioProgSourceChanged(id);
+    if (Config.bDebug) {
+      console.log("clicked link uri");
+      console.log(uri);
+    }
+    if (uri === undefined || uri == null) return;
+    this.store.setState({ newlocation: uri });
+    // route(uri);
+  };
 
-	linkClicked = (event) => 
-	{
-		// event.preventDefault();
-//		if (!this.state.bCategoryQueryReady)
-//			return;
-		if (event == undefined || event == null)
-			return;
-		var currentCheckedRadio = event.target;
-        var name = currentCheckedRadio.name;
-		if (Config.bDebug)
-		{	
-			console.log("clicked link name:");
-			console.log(name);
-		}
-		// if (name == '') return;
-        // if (name !== 'optsource') return;
-        var id = currentCheckedRadio.id;
-		if (Config.bDebug)
-		{	
-			console.log("clicked link id");
-			console.log(id);
-		}
-        var href = currentCheckedRadio.href;
-		if (Config.bDebug)
-		{	
-			console.log("clicked link href");
-			console.log(href);
-		}
-		// if (this.props.currentProgsourceCntrl)
-			//this.props.currentProgsourceCntrl.removelisteners();
-		this.props.store.setState({ progsource: id });
-		this.setState({ progsource: id });
-		let uri = this.getPathOfRadioProgSourceChanged(id);
-		if (Config.bDebug)
-		{	
-			console.log("clicked link uri");
-			console.log(uri);
-		}
-		if (uri === undefined || uri == null)
-			return;
-		this.store.setState({ newlocation: uri});
-		// route(uri);
-	}
-
-	render(props, state) {
-		if (Config.bDebug)
-			console.log(props.selectedRoute);
-		return (
-			<header class={style.header}>
-			<div role="navigation" lang="fi" tabIndex="0" aria-label="Ohjelmalähteet ja ulkoasu (musta tai valkoinen)">
-			<nav>
-			<h1>Tv-ohjelmat</h1>
-			<Link tablndex="0" id="radio_yle" activeClassName={style.active} href="/"
-			  onClick={this.linkClicked}>Yle</Link>
-			<Link tablndex="0" id="radio_telkku" activeClassName={style.active} href="/telkku"
-			onClick={this.linkClicked}>Telkku</Link>
-			<Link tablndex="0" id="radio_telkkuhtml" activeClassName={style.active} href="/htmltelkku"
-			onClick={this.linkClicked}>Telkku html</Link>
-			<Link tablndex="0" id="radio_amppari" activeClassName={style.active} href="/amppari"
-			onClick={this.linkClicked}>Amppari Tv</Link>
-			<Link tablndex="0" id="radio_htmlamppari" activeClassName={style.active} href="/htmlamppari"
-			onClick={this.linkClicked}>Amppari Tv html</Link>
-			<space>          </space>
-			<button onClick={this.toggleDarkTheme}>Vaihda teemaa</button>
-			</nav>
-			</div>
-			</header>
-		);
-	}
+  render(props, state) {
+    if (Config.bDebug) console.log(props.selectedRoute);
+    return (
+      <header class={style.header}>
+        <div
+          role="navigation"
+          lang="fi"
+          tabIndex="0"
+          aria-label="Ohjelmalähteet ja ulkoasu (musta tai valkoinen)"
+        >
+          <nav>
+            <h1>Tv-ohjelmat</h1>
+            <Link
+              tablndex="0"
+              id="radio_yle"
+              activeClassName={style.active}
+              href="/"
+              onClick={this.linkClicked}
+            >
+              Yle
+            </Link>
+            <Link
+              tablndex="0"
+              id="radio_telkku"
+              activeClassName={style.active}
+              href="/telkku"
+              onClick={this.linkClicked}
+            >
+              Telkku
+            </Link>
+            <Link
+              tablndex="0"
+              id="radio_telkkuhtml"
+              activeClassName={style.active}
+              href="/htmltelkku"
+              onClick={this.linkClicked}
+            >
+              Telkku html
+            </Link>
+            <Link
+              tablndex="0"
+              id="radio_amppari"
+              activeClassName={style.active}
+              href="/amppari"
+              onClick={this.linkClicked}
+            >
+              Amppari Tv
+            </Link>
+            <Link
+              tablndex="0"
+              id="radio_htmlamppari"
+              activeClassName={style.active}
+              href="/htmlamppari"
+              onClick={this.linkClicked}
+            >
+              Amppari Tv html
+            </Link>
+            <space> </space>
+            <button onClick={this.toggleDarkTheme}>Vaihda teemaa</button>
+          </nav>
+        </div>
+      </header>
+    );
+  }
 }
 
 /*

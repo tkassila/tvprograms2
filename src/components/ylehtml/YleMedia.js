@@ -569,7 +569,7 @@ export default class YleMedia extends Component {
 					<div class={style.cardHeader}>
 						<h1>Yle {this.getFetchedDate()}</h1>
 						<div>
-							Hae tv-ohjelmatiedot alimpaan taulukkoon yllä olevan päivän ajankohta linkin 
+							Hae ohjelmatiedot alimpaan taulukkoon yllä olevan päivän ajankohta linkin 
 							ja alla olevan päivämäärän mukaan:
 						</div>
 						<div class={style.cardHeader}>
