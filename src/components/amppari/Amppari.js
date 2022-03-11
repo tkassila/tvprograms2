@@ -338,8 +338,11 @@ export default class Amppari extends Component {
     let item = null;
     let max = json.length;
 
-    for (i = 0; i < max; i++) //Array.from(json).forEach(item =>
-    {
+    for (
+      i = 0;
+      i < max;
+      i++ //Array.from(json).forEach(item =>
+    ) {
       item = json[i];
       iCount = iCount + 1;
       if (!founded) {
@@ -599,12 +602,17 @@ export default class Amppari extends Component {
       console.log(channelurl);
     }
 
+    this.fetcheditems = [];
+    this.channeltypeitems = [];
+    this.store.setState({ fetchitems: [] });
+
     this.setState({
       bUnderFetch: true,
       channels: [],
       selectedchannelindex: 0,
       currentChannelSetIndex: 0,
       errmsg: null,
+      fetcheditems: null,
     });
 
     this.bUnderFetch = true;
@@ -625,6 +633,7 @@ export default class Amppari extends Component {
       })
       //		.then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then((data) => {
+        let data2 = data;
         if (Config.bDebug) {
           console.log("fetchHtmlAmppariChannels 1.5");
           //console.log("data");
@@ -645,15 +654,15 @@ export default class Amppari extends Component {
           }
           if (indexEnd > -1) {
             if (Config.bDebug) console.log("indexEnd > -1");
-            data = data.substring(index + INITIAL_STATE.length, indexEnd);
+            data2 = data.substring(index + INITIAL_STATE.length, indexEnd);
             /*
 						if (Config.bDebug)
 						{				
-							console.log("data1");
-							console.log(data);
+							console.log("data2");
+							console.log(data2);
 						}
 						*/
-            let json = JSON.parse(data);
+            let json = JSON.parse(data2);
             /*
 						if (Config.bDebug)
 						{				
@@ -674,15 +683,15 @@ export default class Amppari extends Component {
               console.log("json2");
               console.log(json2);
             }
-            data = this.getChannelsAndProgramsFromJsonArray(json2);
+            data2 = this.getChannelsAndProgramsFromJsonArray(json2);
             if (Config.bDebug) {
               console.log("-- 1");
-              // console.log(data);
+              // console.log(data2);
             }
-            this.fetcheditems = data;
-            this.channeltypeitems = data;
-            // this.programtypeitems = data;
-            // this.channels = data;
+            this.fetcheditems = data2;
+            this.channeltypeitems = data2;
+            // this.programtypeitems = data2;
+            // this.channels = data2;
             this.setState({
               fetcheditems: this.fetcheditems,
               channels: [],
@@ -696,12 +705,12 @@ export default class Amppari extends Component {
               bSearchButtonClicked: false,
               selectedchannelindex: 0,
             });
-            this.store.setState({ fetchitems: data });
+            this.store.setState({ fetchitems: data2 });
             // this.filterWhenUIControlsHasBeenChanged(filtercalled.CHANNELTYPE);
-            // this.channels = data;
-            // this.setState({ channels: data, });
+            // this.channels = data2;
+            // this.setState({ channels: data2, });
             /*
-						this.setState({ fetcheditems: data, channels: null,
+						this.setState({ fetcheditems: data2, channels: null,
 							bUnderFetch: false, selectedsuodattimet: 'kaikki',
 								selectedtyyppi: 'kaikki', selectedTyyppiinindex: 0,
 								selectedsuodatinindex: 0 });
@@ -722,7 +731,7 @@ export default class Amppari extends Component {
           }
         }
 
-        fetched = data; // this.getJsonDataFromTelkkuRssXml(data);
+        fetched = data2; // this.getJsonDataFromTelkkuRssXml(data);
       })
       .catch((error) => {
         console.error("error");
@@ -1808,9 +1817,10 @@ export default class Amppari extends Component {
                 getPOfIndex={this.getPOfIndex}
                 oldProgram={this.oldProgram}
                 currenttime={currenttime}
-                themevalue={props.themevalue}
+                themevalue={
+                  props.themevalue ? props.themevalue : this.state.themevalue
+                }
                 bshowdcurrentprograms={this.state.bshowdcurrentprograms}
-                themevalue={this.state.themevalue}
                 displayAllDescriptions={this.state.bDisplayAllDescriptions}
               />
             );
@@ -3032,7 +3042,7 @@ export default class Amppari extends Component {
 				});
 				*/
       channels = tableheaders_and_rows.channels;
-      if (channels != null)
+      if (channels != null && channels.length > 0)
         tabletds = channels.map((child, i) => {
           return (
             <td
@@ -3184,52 +3194,6 @@ export default class Amppari extends Component {
                   >
                     {this.getPlus1Day(9)}
                   </a>
-                  <space> </space>
-                  <a
-                    lang="fi"
-                    href="."
-                    id={"dayname_" + this.getPlus1DayId(10)}
-                    onClick={this.onClickSetDateString}
-                  >
-                    {this.getPlus1Day(10)}
-                  </a>
-                  <space> </space>
-                  <a
-                    lang="fi"
-                    href="."
-                    id={"dayname_" + this.getPlus1DayId(11)}
-                    onClick={this.onClickSetDateString}
-                  >
-                    {this.getPlus1Day(11)}
-                  </a>
-                  <space> </space>
-                  <a
-                    lang="fi"
-                    href="."
-                    id={"dayname_" + this.getPlus1DayId(12)}
-                    onClick={this.onClickSetDateString}
-                  >
-                    {this.getPlus1Day(12)}
-                  </a>
-                  <space> </space>
-                  <a
-                    lang="fi"
-                    href="."
-                    id={"dayname_" + this.getPlus1DayId(13)}
-                    onClick={this.onClickSetDateString}
-                  >
-                    {this.getPlus1Day(13)}
-                  </a>
-                  <space> </space>
-                  <a
-                    lang="fi"
-                    href="."
-                    id={"dayname_" + this.getPlus1DayId(14)}
-                    onClick={this.onClickSetDateString}
-                  >
-                    {this.getPlus1Day(14)}
-                  </a>
-                  <br />
                 </div>
               </div>
             </section>
@@ -3424,7 +3388,7 @@ export default class Amppari extends Component {
                     ? " (haun tulokset)"
                     : ""}
                 </div>
-                {!tabletds && (
+                {tabletds === null && (
                   <div
                     tabIndex="0"
                     lang="fi"
@@ -3439,8 +3403,13 @@ export default class Amppari extends Component {
             </section>
             <table
               id="programtable"
-              style={"width:100%; " + tableBorderStyle}
-              style={this.state.themevalue === "" ? "" : this.sectionStyle}
+              style={
+                "width:100%; " +
+                tableBorderStyle +
+                (this.state.themevalue === ""
+                  ? this.sectionStyle
+                  : this.state.themevalue)
+              }
               ref={this.tablCntl}
             >
               <tbody>

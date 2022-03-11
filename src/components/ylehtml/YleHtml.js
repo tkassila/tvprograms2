@@ -847,7 +847,9 @@ export default class YleHtml extends Component {
     }
 
     let url = fetch_url + this.getTypeParamAndValue(progsource, selecteddate);
-    this.setState({ errmsg: "" });
+    this.setState({ errmsg: "", schedules: null });
+    this.store.setState({ schedules: null });
+
     fetch(url, {
       //			Host: 'localhost:9090',
       timeout: 6000,
@@ -2149,7 +2151,6 @@ export default class YleHtml extends Component {
               currenttime={currenttime}
               bshowdcurrentprograms={this.state.bshowdcurrentprograms}
               themevalue={props.themevalue}
-              bshowdcurrentprograms={this.state.bshowdcurrentprograms}
               showSearch={
                 state.bSearchButtonClicked && state.textSearch != null
               }
@@ -2610,7 +2611,6 @@ export default class YleHtml extends Component {
                     <Button
                       ripple
                       raised
-                      style={inputw}
                       disabled={
                         state.schedules == null ||
                         (state.showChannelsAtSameTime == 1 &&
@@ -2628,7 +2628,6 @@ export default class YleHtml extends Component {
                     <Button
                       ripple
                       raised
-                      style={inputw}
                       disabled={
                         state.schedules == null ||
                         (state.showChannelsAtSameTime == 1 &&
@@ -2735,7 +2734,6 @@ export default class YleHtml extends Component {
                       lang="fi"
                       ripple
                       raised
-                      style={inputw}
                       disabled={state.schedules == null || state.bUnderFetch}
                       onClick={this.searchTextFromChannelsClicked}
                       style={buttoninputw}
