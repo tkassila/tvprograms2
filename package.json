@@ -33,7 +33,7 @@
     "@omiu/dialog": "0.0.4",
     "abort-controller": "^3.0.0",
     "cors": "^2.8.5",
-    "dayjs": "^1.10.8",
+    "dayjs": "^1.11.0",
     "express": "^4.17.3",
     "fetch-jsonp": "^1.2.1",
     "lodash.uniqueid": "^4.0.1",
