@@ -1587,13 +1587,12 @@ export default class Amppari extends Component {
     let max = fetchitems.length;
     let ch = null,
       i = 0;
-    for (i = 0; i < max; i++) {
-      ch = fetchitems[i];
-      if (ch == undefined || ch === null) continue;
-      if (ch.title !== currProg.channel) continue;
-      foundedChannel = ch;
-      break;
-    }
+
+    ch = fetchitems[i];
+    if (ch == undefined || ch === null) return null;
+    if (ch.title !== currProg.channel) return null;
+    foundedChannel = ch;
+
     if (foundedChannel) {
       let nextPropgram = null;
       let foundedProg = null;

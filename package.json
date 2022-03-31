@@ -27,7 +27,8 @@
     "jest": "^24.9.0",
     "jest-preset-preact": "^1.0.0",
     "preact-cli": "^3.3.5",
-    "sirv-cli": "1.0.3"
+    "sirv-cli": "1.0.3",
+    "webpack-bundle-analyzer": "^4.5.0"
   },
   "dependencies": {
     "@omiu/dialog": "0.0.4",
@@ -37,7 +38,7 @@
     "express": "^4.17.3",
     "fetch-jsonp": "^1.2.1",
     "lodash.uniqueid": "^4.0.1",
-    "preact": "^10.6.6",
+    "preact": "^10.7.0",
     "preact-render-to-string": "^5.1.20",
     "wouter-preact": "^2.8.0-alpha.2"
   },

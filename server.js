@@ -392,7 +392,7 @@ function execShellCommandYleData(cmd, res) {
   console.log("cmd");
   console.log(cmd);
   // return new Promise((resolve, reject) => {
-  exec(cmd, (error, stdout, stderr) => {
+    exec(cmd, (error, stdout, stderr) => {
     if (error) {
       console.warn(error);
     }
