@@ -1998,17 +1998,23 @@ export default class YleHtml extends Component {
 
     let newvalue_first =
       first != undefined && first != null && first.trim().length != 0 ? (
-        <span>{first}</span>
+        <span style={"margin-right: 0px; margin-left: 0px; padding: 0px;"}>
+          {first}
+        </span>
       ) : (
         ""
       );
-    let foundedthtml = "background-color: green; color: white;";
+    let foundedthtml =
+      "background-color: green; color: white; margin-right: 0px; margin-left: 0px; padding: 0px;";
     if (themevalue === "--dark")
-      foundedthtml = "background-color: yellow; color: black;";
+      foundedthtml =
+        "background-color: yellow; color: black; margin-right: 0px; margin-left: 0px; padding: 0px;";
     let newvalue_between = <span style={foundedthtml}>{between}</span>;
     let newvalue_last =
       last != undefined && last != null && last.trim().length != 0 ? (
-        <span>{last}</span>
+        <span style={"margin-right: 0px; margin-left: 0px; padding: 0px;"}>
+          {last}
+        </span>
       ) : (
         ""
       );
