@@ -53,10 +53,23 @@ export default class App extends Component {
   ctrlHtmlAmppariRef = null;
   headerRef = null;
   store = null;
+  innerHeight = window.innerHeight;
+  innerWidth = window.innerWidth; // document.querySelector("#height");
+  rtime = null;
+  timeout = false;
+  delta = 400;
 
   constructor(props) {
     super(props);
+    innerHeight = window.innerHeight;
+    innerWidth = window.innerWidth; // document.querySelector("#height");
+
     this.state = {
+      innerHeight: innerHeight,
+      innerWidth: innerWidth,
+      old_innerHeight: innerHeight,
+      old_innerWidth: innerWidth,
+      innerWidth_change: 0,
       yleapiparams: "?app_id=" + Config.yleapi + "&app_key=" + Config.ylekey,
       currentUrl: "/amppari",
       currentProgsourceCntrl: null,
@@ -92,6 +105,8 @@ export default class App extends Component {
       console.log(IsBrowser.isOpera);
       console.log("Isbrowser.isBlink:");
       console.log(IsBrowser.isBlink);
+      console.log("Isbrowser.OS:");
+      console.log(IsBrowser.OS);
     }
 
     store.setState({ isbrowser: IsBrowser, darkstyle: "" });
@@ -110,6 +125,8 @@ export default class App extends Component {
     this.ctrlHtmlAmppariRef = createRef();
     // console.log("after ctrlHtmlAmppariRef");
     this.headerRef = createRef();
+
+    // window.onresize = this.reportWindowSize;
     //  console.log("after headerRef");
     /*
 		var is_screen = window.matchMedia("screen").matches;
@@ -121,7 +138,109 @@ export default class App extends Component {
     //document.getElementsByTagName("body").style = " color: #FFF; background-color: black; border-color: #FFF; ";
     //document.body.style = " color: #FFF; background-color: black; border-color: #FFF; ";
     //	document.body.style = 'background: red;';
+
+    // window.addEventListener("resize", this.resize_end);
+    this.addEvent(window, "resize", this.reportWindowSize, true);
   }
+
+  /*
+    function: addEvent
+
+    @param: obj         (Object)(Required)
+
+        -   The object which you wish
+            to attach your event to.
+
+    @param: type        (String)(Required)
+
+        -   The type of event you
+            wish to establish.
+
+    @param: callback    (Function)(Required)
+
+        -   The method you wish
+            to be called by your
+            event listener.
+
+    @param: eventReturn (Boolean)(Optional)
+
+        -   Whether you want the
+            event object returned
+            to your callback method.
+    */
+  addEvent = (obj, type, callback, eventReturn) => {
+    if (obj == null || typeof obj === "undefined") return;
+
+    if (obj.addEventListener)
+      obj.addEventListener(type, callback, eventReturn ? true : false);
+    else if (obj.attachEvent) obj.attachEvent("on" + type, callback);
+    else obj["on" + type] = callback;
+  };
+
+  watch = (evt) => {
+    /*
+        Older browser versions may return evt.srcElement
+        Newer browser versions should return evt.currentTarget
+    */
+    var dimensions = {
+      height: (evt.srcElement || evt.currentTarget).innerHeight,
+      width: (evt.srcElement || evt.currentTarget).innerWidth,
+    };
+  };
+
+  resize_end = () => {
+    if (new Date() - this.rtime < this.delta) {
+      setTimeout(this.resize_end, this.delta);
+    } else {
+      this.timeout = false;
+      //    alert("Done resizing");
+      this.reportWindowSize();
+    }
+  };
+
+  reportWindowSize = () => {
+    /*
+        Older browser versions may return evt.srcElement
+        Newer browser versions should return evt.currentTarget
+    */
+    /*
+    var dimensions = {
+      height: (event.srcElement || event.currentTarget).innerHeight,
+      width: (event.srcElement || event.currentTarget).innerWidth,
+    };
+    */
+    let innerHeight = window.innerHeight; // event.target.innerHeight; // window.innerHeight;
+    let innerWidth = window.innerWidth; // event.target.innerWidth; // window.innerWidth;
+
+    console.log("innerHeight");
+    console.log(innerHeight);
+    console.log("innerWidth");
+    console.log(innerWidth);
+    let old_innerHeight = this.state.innerHeight;
+    let old_innerWidth = this.state.innerWidth;
+    if (
+      old_innerHeight == undefined ||
+      innerHeight == undefined ||
+      old_innerWidth == undefined ||
+      innerWidth == undefined
+    )
+      return;
+    if (old_innerWidth == innerWidth) return;
+    console.log("kissa");
+
+    this.store.setState({
+      old_innerHeight: old_innerHeight,
+      old_innerWidth: old_innerWidth,
+      innerHeight: innerHeight,
+      innerWidth: innerWidth,
+      innerWidth_change: innerWidth - old_innerWidth,
+    });
+    this.setState({
+      innerWidth: innerHeight,
+      innerWidth: innerWidth,
+      innerWidth_change: innerHeight - old_innerHeight,
+    });
+  };
 
   listenerStoreChange2 = (storestate) => {
     if (Config.bDebug) {
@@ -363,6 +482,7 @@ export default class App extends Component {
                 store={store}
                 ref={this.ctrlYleRef}
                 themevalue={state.themevalue}
+                innerWidth_change={state.innerWidth_change}
               />
             </Route>
             <Route path={["/amppari"]}>

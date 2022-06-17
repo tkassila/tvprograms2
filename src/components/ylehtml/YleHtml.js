@@ -73,6 +73,10 @@ export default class YleHtml extends Component {
   showTableBordersRef = null;
   divDialogStyle = null;
   sectionStyle = null;
+  section_width_css = undefined;
+  section_width = null;
+  tablesectionStyle = null;
+  sectionRef = null;
 
   constructor(props) {
     super(props);
@@ -94,6 +98,13 @@ export default class YleHtml extends Component {
         : "";
     this.sectionStyle =
       themevalue !== undefined && themevalue !== ""
+        ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; " +
+          (this.section_width_css == undefined ? "" : this.section_width_css)
+        : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;" +
+          (this.section_width_css == undefined ? "" : this.section_width_css);
+
+    this.tablesectionStyle =
+      themevalue !== undefined && themevalue !== ""
         ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; "
         : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;";
 
@@ -104,6 +115,7 @@ export default class YleHtml extends Component {
 
     let today = new Date(Date.now());
     this.state = {
+      sectionwidth: 0,
       errmsg: null,
       chosenIndex: 0,
       progsource: "rtv",
@@ -149,6 +161,7 @@ export default class YleHtml extends Component {
     this.checkshowdcurrentprogramsRef = createRef();
     this.showOneChannelRef = createRef();
     this.showTableBordersRef = createRef();
+    this.sectionRef = createRef();
 
     this.store.setStateNoneCallListeners({
       schedules: {},
@@ -168,6 +181,15 @@ export default class YleHtml extends Component {
       console.log(nextProps);
     }
 
+    if (
+      this.sectionRef.current !== undefined &&
+      nextProps.innerWidth_change !== undefined &&
+      nextProps.innerWidth_change != 0
+    ) {
+      this.calculateNewSectionWidth();
+      this.setState({ sectionwidth: this.getSectionWidthCss() });
+    }
+
     if (nextProps !== null && nextProps.themevalue != this.props.themevalue) {
       this.setState({ themevalue: nextProps.themevalue });
       this.divDialogStyle =
@@ -177,8 +199,16 @@ export default class YleHtml extends Component {
 
       this.sectionStyle =
         nextProps.themevalue !== undefined && nextProps.themevalue !== ""
-          ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; "
-          : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;";
+          ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; " +
+              this.state.sectionwidth ==
+            undefined
+            ? ""
+            : this.state.sectionwidth
+          : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;" +
+              this.state.sectionwidth ==
+            undefined
+          ? ""
+          : this.state.sectionwidth;
     }
     /*
 	   if (this.state.progsource != nextProps.progsource)
@@ -222,7 +252,48 @@ export default class YleHtml extends Component {
     // this.tablCntl.current.onkeydown = this.cntlPlusKeyUp;
     if (document.getElementById("programtable"))
       document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
+    this.section_width = this.sectionRef.current.offsetWidth;
+    console.log("this.sectionRef.current.offsetWidth");
+    console.log(this.section_width);
   }
+
+  getDerivedStateFromProps(props, state) {
+    // this.state.sectionwidth = this.getSectionWidthCss();
+    calculateNewSectionWidth();
+  }
+
+  calculateNewSectionWidth = () => {
+    if (this.sectionRef.current !== undefined) {
+      /*
+      let curr_innner_width = this.store.getState().innerWidth;
+      let old_innner_width = this.store.getState().old_innerWidth;
+      if (
+        curr_innner_width !== undefined &&
+        old_innner_width !== undefined &&
+        this.innner_width !== undefined
+      ) {
+        let new_innner_width = 0;
+        if (old_innner_width < curr_innner_width)
+          new_innner_width =
+            this.innner_width + (curr_innner_width - old_innner_width);
+        else
+          new_innner_width =
+            this.innner_width - (old_innner_width - curr_innner_width);
+        // this.section_width = this.sectionRef.current.offsetWidth;
+      }
+      */
+      if (this.props.innerWidth_change == 0) return;
+      let new_innner_width = 0;
+      if (this.props.innerWidth_change < 0)
+        new_innner_width =
+          this.sectionRef.current.offsetWidth - this.props.innerWidth_change;
+      else
+        new_innner_width =
+          this.sectionRef.current.offsetWidth + this.props.innerWidth_change;
+      if (new_innner_width == 0) return;
+      this.setState({ innner_width: new_innner_width });
+    }
+  };
 
   getCurrentColumnIndex = (path) => {
     if (path === undefined || path === null || path.length === 0) return null;
@@ -2091,6 +2162,10 @@ export default class YleHtml extends Component {
     }
   };
 
+  getSectionWidthCss = () => {
+    return "width: " + this.section_width + "px;";
+  };
+
   render(props, state) {
     const buttoninputw =
       "float: none; display: inline-block; vertical-align: middle; " +
@@ -2113,6 +2188,7 @@ export default class YleHtml extends Component {
       tableBorderStyle = " border: 1px solid " + table_border_color + ";";
     }
 
+    let sectionwidth = "";
     if (
       this.state.bSchedulesQueryReady &&
       state.schedules != null &&
@@ -2128,6 +2204,10 @@ export default class YleHtml extends Component {
             if (this.state.progtable == 'rlist')
                 uigrid = this.getListGrid();
 				*/
+      sectionwidth = this.getSectionWidthCss();
+      this.section_width_css = sectionwidth;
+      console.log("sectionwidth");
+      console.log(sectionwidth);
 
       let tableheaders_and_rows =
         this.getTableHeadersAndTableRowsAfterChannels();
@@ -2281,7 +2361,10 @@ export default class YleHtml extends Component {
               </label>
             </div>
             <section
-              style={this.state.themevalue === "" ? "" : this.sectionStyle}
+              ref={this.sectionRef}
+              style={
+                this.state.themevalue === "" ? sectionwidth : this.sectionStyle
+              }
             >
               <div class={style.cardHeader}>
                 <p lang="fi" tabIndex="0">
@@ -2597,7 +2680,9 @@ export default class YleHtml extends Component {
               </div>
             </section>
             <section
-              style={this.state.themevalue === "" ? "" : this.sectionStyle}
+              style={
+                this.state.themevalue === "" ? sectionwidth : this.sectionStyle
+              }
             >
               <div
                 lang="fi"
@@ -2791,7 +2876,7 @@ export default class YleHtml extends Component {
             </section>
             <br></br>
             <section
-              style={this.state.themevalue === "" ? "" : this.sectionStyle}
+              style={this.state.themevalue === "" ? "" : this.tablesectionStyle}
             >
               <div>
                 <div class=" mdc-typography--caption">

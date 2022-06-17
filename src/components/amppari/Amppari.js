@@ -104,6 +104,10 @@ export default class Amppari extends Component {
   removerfunctionChannelType = null;
   checkshowdcurrentprogramsRef = null;
   bUnderFetch = false;
+  sectionStyle = null;
+  tablesectionStyle = null;
+  sectionRef = null;
+  section_width = null;
 
   constructor(props) {
     super(props);
@@ -166,6 +170,7 @@ export default class Amppari extends Component {
     this.programTypeRef = createRef();
     this.tablCntl = createRef();
     this.checkshowdcurrentprogramsRef = createRef();
+    this.sectionRef = createRef();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -177,6 +182,16 @@ export default class Amppari extends Component {
     if (nextProps !== null && nextProps.themevalue != this.props.themevalue) {
       this.setState({ themevalue: nextProps.themevalue });
       this.sectionStyle =
+        nextProps.themevalue !== undefined && nextProps.themevalue !== ""
+          ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; " +
+            (this.state.sectionwidth == undefined
+              ? ""
+              : this.state.sectionwidth)
+          : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;" +
+            (this.state.sectionwidth == undefined
+              ? ""
+              : this.state.sectionwidth);
+      this.tablesectionStyle =
         nextProps.themevalue !== undefined && nextProps.themevalue !== ""
           ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; "
           : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;";
@@ -202,6 +217,7 @@ export default class Amppari extends Component {
       this.store.setState({ fetcheditems: store_fetcheditems });
     }
     document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
+    this.section_width = this.sectionRef.current.offsetWidth;
   }
 
   removelisteners = () => {
@@ -2951,10 +2967,19 @@ export default class Amppari extends Component {
     }
   };
 
+  getSectionWidthCss = () => {
+    return "width: " + this.section_width + "px;";
+  };
+
   render(props, state) {
     if (Config.bDebug) {
       console.log("state");
       console.log(state);
+    }
+
+    let sectionwidth = "";
+    if (state.fetcheditems != null && state.fetcheditems.length > 0) {
+      sectionwidth = this.getSectionWidthCss();
     }
 
     const buttonFocusStyle =
@@ -3103,7 +3128,12 @@ export default class Amppari extends Component {
             <h1 tabIndex="0" lang="fi">
               Amppari {this.getFetchedDate()}
             </h1>
-            <section style={this.sectionStyle}>
+            <section
+              ref={this.sectionRef}
+              style={
+                this.state.themevalue === "" ? sectionwidth : this.sectionStyle
+              }
+            >
               <div class={style.cardHeader}>
                 <div lang="fi" tabIndex="0">
                   Hae tv-ohjelmatiedot alimpaan taulukkoon alla olevan
@@ -3203,7 +3233,12 @@ export default class Amppari extends Component {
               </div>
             </section>
 
-            <section style={this.sectionStyle}>
+            <section
+              ref={this.sectionRef}
+              style={
+                this.state.themevalue === "" ? sectionwidth : this.sectionStyle
+              }
+            >
               <div>
                 <div
                   lang="fi"
@@ -3368,7 +3403,13 @@ export default class Amppari extends Component {
                 />
               </div>
             </section>
-            <section style={this.sectionStyle}>
+            <section
+              ref={this.sectionRef}
+              style={
+                this.state.themevalue === "" ? sectionwidth : this.sectionStyle
+              }
+            >
+              {" "}
               <div>
                 <div style={{ "background-color": "red", color: "yellow" }}>
                   {state.errmsg}
@@ -3406,22 +3447,26 @@ export default class Amppari extends Component {
                 )}
               </div>
             </section>
-            <table
-              id="programtable"
-              style={
-                "width:100%; " +
-                tableBorderStyle +
-                (this.state.themevalue === ""
-                  ? this.sectionStyle
-                  : this.state.themevalue)
-              }
-              ref={this.tablCntl}
+            <section
+              style={this.state.themevalue === "" ? "" : this.tablesectionStyle}
             >
-              <tbody>
-                <tr>{tableheaders}</tr>
-                <tr>{tabletds}</tr>
-              </tbody>
-            </table>
+              <table
+                id="programtable"
+                style={
+                  "width:100%; " +
+                  tableBorderStyle +
+                  (this.state.themevalue === ""
+                    ? this.sectionStyle
+                    : this.state.themevalue)
+                }
+                ref={this.tablCntl}
+              >
+                <tbody>
+                  <tr>{tableheaders}</tr>
+                  <tr>{tabletds}</tr>
+                </tbody>
+              </table>
+            </section>
           </div>
         </div>
       </Fragment>

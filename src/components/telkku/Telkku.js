@@ -44,6 +44,10 @@ export default class Telkku extends Component {
   tablCntl = null;
   showTableBordersRef = null;
   sectionStyle = null;
+  tablesectionStyle = null;
+  sectionRef = null;
+  section_width = null;
+  section_width_css = undefined;
 
   constructor(props) {
     super(props);
@@ -75,10 +79,20 @@ export default class Telkku extends Component {
       bLoad10Channels: false,
       fetcheddata: null,
       fetcheditems: [],
+      sectionwidth: 0,
     };
 
     let themevalue = props.themevalue;
     this.sectionStyle =
+      themevalue !== undefined && themevalue !== ""
+        ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; " +
+          (this.this.section_width_css == undefined
+            ? ""
+            : this.section_width_css)
+        : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;" +
+          (this.section_width_css == undefined ? "" : this.section_width_css);
+
+    this.tablesectionStyle =
       themevalue !== undefined && themevalue !== ""
         ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; "
         : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;";
@@ -93,6 +107,7 @@ export default class Telkku extends Component {
     this.scrollingDlgRef = createRef();
     this.tablCntl = createRef();
     this.showTableBordersRef = createRef();
+    this.sectionRef = createRef();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -105,8 +120,14 @@ export default class Telkku extends Component {
       this.setState({ themevalue: nextProps.themevalue });
       this.sectionStyle =
         nextProps.themevalue !== undefined && nextProps.themevalue !== ""
-          ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; "
-          : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;";
+          ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; " +
+            (this.state.sectionwidth == undefined
+              ? ""
+              : this.state.sectionwidth)
+          : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;" +
+            (this.state.sectionwidth == undefined
+              ? ""
+              : this.state.sectionwidth);
     }
   }
 
@@ -117,9 +138,14 @@ export default class Telkku extends Component {
     this._mounted = true;
     if (document.getElementById("programtable"))
       document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
-
+    this.section_width = this.sectionRef.current.offsetWidth;
     //	this.fetchRssTelkkuPrograms();
+    console.log("kissa");
   }
+
+  getSectionWidthCss = () => {
+    return "width: " + this.section_width + "px;";
+  };
 
   removelisteners() {
     if (this.abortSignal && !this.abortSignal.aborted)
@@ -1133,6 +1159,12 @@ export default class Telkku extends Component {
       console.log(state);
     }
 
+    let sectionwidth = "";
+    if (state.fetcheditems != null && state.fetcheditems.length > 0) {
+      sectionwidth = this.getSectionWidthCss();
+      this.section_width_css = sectionwidth;
+    }
+
     let divDialogStyle =
       props.themevalue !== undefined && props.themevalue !== ""
         ? "color: #FFF; background-color: black; border-color: #FFF;"
@@ -1220,7 +1252,12 @@ export default class Telkku extends Component {
               Telkku {this.getFetchedDate()}
             </h1>
 
-            <section style={this.sectionStyle}>
+            <section
+              ref={this.sectionRef}
+              style={
+                this.state.themevalue === "" ? sectionwidth : this.sectionStyle
+              }
+            >
               <div class={style.cardBody}>
                 <div
                   lang="fi"
@@ -1412,7 +1449,7 @@ export default class Telkku extends Component {
             <br />
             <br />
             <section
-              style={this.state.themevalue === "" ? "" : this.sectionStyle}
+              style={this.state.themevalue === "" ? "" : this.tablesectionStyle}
             >
               <div style={{ "background-color": "red", color: "yellow" }}>
                 {state.errmsg}
