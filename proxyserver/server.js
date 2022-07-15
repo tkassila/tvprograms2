@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 //const parseurl = require('url')
+//const vhost = require("vhost");
+var path = require("path");
 const app = express();
 const port = 9090;
 
@@ -428,7 +430,7 @@ function execShellCommandXmlData(cmd, res) {
   console.log("cmd");
   console.log(cmd);
   // return new Promise((resolve, reject) => {
-    exec(cmd, {maxBuffer: 1024 * 2000}, (error, stdout, stderr) => {
+  exec(cmd, { maxBuffer: 1024 * 2000 }, (error, stdout, stderr) => {
     if (error) {
       console.warn(error);
     }
@@ -448,7 +450,22 @@ function execShellCommandXmlData(cmd, res) {
 
 app.use(cors());
 
+console.log("new public staticits:");
+console.log(__dirname);
+
+var indexfunc = function (req, res) {
+  // var d = new Date();
+  res.sendFile(path.join(__dirname + "/public/index.html"));
+  // Info(req.ip + " - Session to main.html built successfully! ");
+};
+app.get("/htmlamppari", indexfunc);
+app.get("/htmltelkku", indexfunc);
+app.get("/amppari", indexfunc);
+app.get("/telkku", indexfunc);
 app.use("/", express.static("public"));
+app.use(express.static("public"));
+
+// app.use("/", express.static("public"));
 
 // -H "Content-Type: text/html; charset=utf-8"
 app.get("/yletv_opas/:date", (req, res) => {
