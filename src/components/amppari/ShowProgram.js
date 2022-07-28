@@ -16,7 +16,8 @@ import { useState } from 'preact/hooks';
 //import LayoutGrid from 'preact-material-components/LayoutGrid';
 //import 'preact-material-components/LayoutGrid/style.css';
 
-import Dialog from '../dialog/Dialog';
+//import Dialog from '../dialog/Dialog';
+import Dialog from '../dialog/PreactDialog';
 
 import Config from '../../utils/Config';
 
