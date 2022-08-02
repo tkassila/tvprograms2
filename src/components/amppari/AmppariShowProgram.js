@@ -11,7 +11,7 @@ import { useState, useRef } from "preact/hooks";
 //import 'preact-material-components/Button/style.css';
 //import 'preact-material-components/Theme/style.css';
 
-//import Dialog from '../dialog/Dialog'
+//import Dialog from "../dialog/Dialog";
 import Dialog from "../dialog/PreactDialog";
 
 //import Dialog from '../dialog/FDialog'

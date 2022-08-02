@@ -23,7 +23,7 @@ import Button from "../button/Button";
 
 import HTMLComment from "react-html-comment";
 
-// import Dialog from "../dialog/Dialog";
+//import Dialog from "../dialog/Dialog";
 import Dialog from "../dialog/PreactDialog";
 import SwitchCheckbox from "../checkbox/CheckBox";
 
