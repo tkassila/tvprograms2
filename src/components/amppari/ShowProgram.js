@@ -18,6 +18,7 @@ import { useState } from 'preact/hooks';
 
 //import Dialog from '../dialog/Dialog';
 import Dialog from '../dialog/PreactDialog';
+//import Dialog from "../dialog/MiuDialog";
 
 import Config from '../../utils/Config';
 

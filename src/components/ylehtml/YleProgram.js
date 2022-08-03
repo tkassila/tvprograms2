@@ -1,13 +1,14 @@
 import { h, Fragment, Component, createRef } from "preact";
 import { useState, useRef } from "preact/hooks";
 import _uniqueId from "lodash/uniqueId";
+// // "@omiu/dialog": "0.0.4",
 // import Card from 'preact-material-components/Card';
 //import 'preact-material-components/Card/style.css';
 //import 'preact-material-components/Button/style.css';
 //import Select from 'preact-material-components/Select';
 //import 'preact-material-components/List/style.css';
 //import 'preact-material-components/Menu/style.css';
-//import 'preact-material-components/Select/style.css';
+//import 'preanpct-material-components/Select/style.css';
 //import Radio from 'preact-material-components/Radio';
 //import FormField from 'preact-material-components/FormField';
 //import 'preact-material-components/FormField/style.css';

@@ -17,7 +17,6 @@ import { useState, useRef } from "preact/hooks";
 
 //import Dialog from "../dialog/Dialog";
 import Dialog from "../dialog/PreactDialog";
-
 import Config from "../../utils/Config";
 
 /**
