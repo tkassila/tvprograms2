@@ -1,20 +1,20 @@
 {
-    "version": "0.1.0",
-    "configurations": [
-        {
-            "name": "Attach to Chrome",
-            "port": 9222,
-            "request": "attach",
-            "type": "pwa-chrome",
-            "webRoot": "${workspaceFolder}/src"
-        },      
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Chrome",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceRoot}/src",
-            "breakOnLoad": true
-        }
-    ]
-  }
+  "version": "0.1.0",
+  "configurations": [
+    {
+      "name": "Attach to Chrome",
+      "port": 9222,
+      "request": "attach",
+      "type": "chrome",
+      "webRoot": "${workspaceFolder}/src"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Chrome",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceRoot}/src",
+      "breakOnLoad": true
+    }
+  ]
+}
