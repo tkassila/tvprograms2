@@ -31,6 +31,7 @@
     "webpack-bundle-analyzer": "^4.5.0"
   },
   "dependencies": {
+    "@omiu/dialog": "^0.0.5",
     "abort-controller": "^3.0.0",
     "cors": "^2.8.5",
     "dayjs": "^1.11.5",
