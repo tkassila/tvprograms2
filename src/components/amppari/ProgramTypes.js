@@ -171,6 +171,7 @@ export default class ProgramTypes extends Component {
     let foundedChannels = [];
 
     Array.from(fitems).forEach((cha) => {
+      if (cha === undefined) return;
       chcoopy = {};
       Object.assign(chcoopy, cha);
       /*
@@ -188,6 +189,7 @@ export default class ProgramTypes extends Component {
       let prcopy = null;
       Array.from(chcoopy.channelprograms).forEach((pr) => {
         // cha.channelprograms.forEach(pr, i => {
+        if (pr === undefined) return;
         if (foundmovies && pr.movie) {
           progfounded = true;
           foundedPrograms.push(pr);

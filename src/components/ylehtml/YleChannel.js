@@ -1,4 +1,3 @@
-import { h } from "preact";
 import { useState } from "preact/hooks";
 import style from "./style";
 import Config from "../../utils/Config";

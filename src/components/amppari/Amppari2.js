@@ -428,6 +428,7 @@ export default class Amppari2 extends Component {
     let channels = [];
 
     Array.from(tvchannels).forEach((item) => {
+      if (item === undefined) return;
       jsonch = this.getJsonChannel(item);
       if (jsonch !== null) channels.push(jsonch);
     });
@@ -499,6 +500,7 @@ export default class Amppari2 extends Component {
     if (jsonchannel == null) return null;
 
     Array.from(programs).forEach((pr) => {
+      if (pr === undefined) return;
       jsonpr = this.getJsonProgram(pr);
       if (jsonpr !== null) jsonprograms.push(jsonpr);
     });
@@ -802,6 +804,7 @@ export default class Amppari2 extends Component {
 
     if (Config.bDebug) console.log("chcoopy.channelprograms");
     Array.from(data).forEach((pr) => {
+      if (pr === undefined) return;
       channel = map.get(pr.channel);
       if (channel == undefined || channel == null) {
         console.log("channel == undefined");
@@ -964,6 +967,7 @@ export default class Amppari2 extends Component {
 
                 channeldata.channelprograms = [];
                 Array.from(arrprogs).forEach((pr) => {
+                  if (pr === undefined) return;
                   channeldata.channelprograms.push(pr);
                 });
                 if (channeldata != null) channels.push(channeldata);
@@ -2251,6 +2255,7 @@ export default class Amppari2 extends Component {
     let foundedChannels = [];
 
     Array.from(fitems).forEach((cha) => {
+      if (cha === undefined) return;
       chcoopy = {};
       Object.assign(chcoopy, cha);
       /*
@@ -2268,6 +2273,7 @@ export default class Amppari2 extends Component {
       let prcopy = null;
       Array.from(chcoopy.channelprograms).forEach((pr) => {
         // cha.channelprograms.forEach(pr, i => {
+        if (pr === undefined) return;
         if (foundmovies && pr.movie) {
           progfounded = true;
           foundedPrograms.push(pr);
@@ -2595,6 +2601,7 @@ export default class Amppari2 extends Component {
           }
 
           Array.from(search_channels).forEach((cha) => {
+            if (cha === undefined) return;
             chcoopy = {};
             index = -1;
             founded = false;
@@ -2623,6 +2630,7 @@ export default class Amppari2 extends Component {
             let prcopy = null;
             Array.from(chcoopy.channelprograms).forEach((pr) => {
               // cha.channelprograms.forEach(pr, i => {
+              if (pr === undefined) return;
               progfounded = false;
               prcopy = {};
               Object.assign(prcopy, pr);

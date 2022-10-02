@@ -297,6 +297,7 @@ export default class Telkku extends Component {
     if (xmlitems == null || xmlitems == undefined) return null;
     json.channelprograms = [];
     xmlitems.forEach((item) => {
+      if (item === undefined) return;
       json.channelprograms.push(this.getChannelProgramFromXml(item));
     });
 
@@ -551,6 +552,7 @@ export default class Telkku extends Component {
           chcoopy = {};
           index = -1;
           founded = false;
+          if (cha === undefined) return;
           // this.state.channels.forEach(cha, i => {
           Object.assign(chcoopy, cha);
           if (Config.bDebug) {
@@ -574,6 +576,7 @@ export default class Telkku extends Component {
           Array.from(chcoopy.channelprograms).forEach((pr) => {
             // cha.channelprograms.forEach(pr, i => {
             progfounded = false;
+            if (pr === undefined) return;
             index = pr.title
               ? pr.title.toUpperCase().indexOf(uppersearchText)
               : -1;
