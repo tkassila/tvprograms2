@@ -141,7 +141,7 @@ export default class Telkku extends Component {
       document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
     this.section_width = this.sectionRef.current.offsetWidth;
     //	this.fetchRssTelkkuPrograms();
-    console.log("kissa");
+    if (Config.bDebug) console.log("kissa");
   }
 
   getSectionWidthCss = () => {

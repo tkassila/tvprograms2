@@ -28,7 +28,6 @@ import HtmlAmppariRoute from "../routes/ampparihtml/HtmlAmppariRoute";
 //import './AppBackgroundBlack.css'
 
 import makeMatcher from "wouter-preact/matcher";
-
 const defaultMatcher = makeMatcher();
 
 /*
@@ -84,7 +83,7 @@ export default class App extends Component {
       console.log(this.state);
     }
 
-    console.log("Media.initializeScreenListeners()");
+    if (Config.bDebug) console.log("Media.initializeScreenListeners()");
     Media.initializeScreenListeners();
     console.log("Media.screen");
     console.log(Media.screen.isRretinaOrBigger_2d);
@@ -111,7 +110,7 @@ export default class App extends Component {
 
     store.setState({ isbrowser: IsBrowser, darkstyle: "" });
 
-    console.log("Config");
+    if (Config.bDebug) console.log("Config");
     // console.log(Config);
 
     this.ctrlYleRef = createRef();
@@ -212,10 +211,12 @@ export default class App extends Component {
     let innerHeight = window.innerHeight; // event.target.innerHeight; // window.innerHeight;
     let innerWidth = window.innerWidth; // event.target.innerWidth; // window.innerWidth;
 
-    console.log("innerHeight");
-    console.log(innerHeight);
-    console.log("innerWidth");
-    console.log(innerWidth);
+    if (Config.bDebug) {
+      console.log("innerHeight");
+      console.log(innerHeight);
+      console.log("innerWidth");
+      console.log(innerWidth);
+    }
     let old_innerHeight = this.state.innerHeight;
     let old_innerWidth = this.state.innerWidth;
     if (
@@ -226,7 +227,7 @@ export default class App extends Component {
     )
       return;
     if (old_innerWidth == innerWidth) return;
-    console.log("kissa");
+    if (Config.bDebug) console.log("kissa");
 
     this.store.setState({
       old_innerHeight: old_innerHeight,
@@ -291,8 +292,10 @@ export default class App extends Component {
       if (modUri == undefined || modUri === null || modUri == "undefined")
         modUri = "/";
       //	this.state.currentUrl = modUri;
-      console.log("this.state.currentUrl");
-      console.log(this.state.currentUrl);
+      if (Config.bDebug) {
+        console.log("this.state.currentUrl");
+        console.log(this.state.currentUrl);
+      }
       //	route(modUri);
     }
     this.themeChange("");
@@ -306,7 +309,7 @@ export default class App extends Component {
    *	@param {string} event.url	The newly routed URL
    */
   handleRoute = async (e) => {
-    console.log("app.js handleRoute");
+    if (Config.bDebug) console.log("app.js handleRoute");
 
     if (e == null || e == undefined /* || !this.state.componentDidMount */)
       return;
@@ -478,6 +481,7 @@ export default class App extends Component {
             </Route>
             <Route path={["/"]}>
               <YleRoute
+                type="text/partytown"
                 path="/"
                 store={store}
                 ref={this.ctrlYleRef}
@@ -487,6 +491,7 @@ export default class App extends Component {
             </Route>
             <Route path={["/amppari"]}>
               <AmppariRoute
+                type="text/partytown"
                 path="/amppari"
                 store={store}
                 ref={this.ctrlAmppariRef}

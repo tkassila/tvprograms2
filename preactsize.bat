@@ -1,0 +1,1 @@
+package-size preact,@omiu/dialog,abort-controller,cors,dayjs,fetch-jsonp,lodash.uniqueid,preact-material-components,wouter-preact

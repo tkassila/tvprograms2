@@ -253,8 +253,10 @@ export default class YleHtml extends Component {
     if (document.getElementById("programtable"))
       document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
     this.section_width = this.sectionRef.current.offsetWidth;
-    console.log("this.sectionRef.current.offsetWidth");
-    console.log(this.section_width);
+    if (Config.bDebug) {
+      console.log("this.sectionRef.current.offsetWidth");
+      console.log(this.section_width);
+    }
   }
 
   getDerivedStateFromProps(props, state) {
@@ -2206,9 +2208,10 @@ export default class YleHtml extends Component {
 				*/
       sectionwidth = this.getSectionWidthCss();
       this.section_width_css = sectionwidth;
-      console.log("sectionwidth");
-      console.log(sectionwidth);
-
+      if (Config.bDebug) {
+        console.log("sectionwidth");
+        console.log(sectionwidth);
+      }
       let tableheaders_and_rows =
         this.getTableHeadersAndTableRowsAfterChannels();
       headers = tableheaders_and_rows.headers;

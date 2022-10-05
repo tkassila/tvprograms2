@@ -30,7 +30,12 @@ export default class AmppariRoute extends Component {
   }
 
   componentDidMount() {
-    if (Config.bDebug) console.log("componentDidMount 1");
+    if (Config.bDebug) console.log("AmppariRoute componentDidMount 1");
+    const loadTime =
+      window.performance.timing.domContentLoadedEventEnd -
+      window.performance.timing.navigationStart;
+    console.log("loadTime=" + loadTime);
+
     // this.fetchProgCategories();
   }
 

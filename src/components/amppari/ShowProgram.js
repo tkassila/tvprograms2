@@ -65,9 +65,12 @@ class ShowProgram extends Component
 
     componentDidMount()
 	{
-        console.log("componentDidMount");
-        console.log("this.scrollingDlgRef");
-        console.log(this.scrollingDlgRef);
+        if (Config.bDebug)
+        {
+            console.log("componentDidMount");
+            console.log("this.scrollingDlgRef");
+            console.log(this.scrollingDlgRef);
+        }
     }
 
     

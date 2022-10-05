@@ -74,7 +74,8 @@ class MiuDialog extends Component {
 
   okBttnPressed = (event) => {
     event.preventDefault();
-    console.log("dialog okBttnPressed: dialogRef=" + this.dialogRef);
+    if (Config.bDebug)
+      console.log("dialog okBttnPressed: dialogRef=" + this.dialogRef);
     // console.log("this.dialogRef=" +this.dialogRef.visible);
     // this.dialogRef.visible = true;
     this.dialogRef.current.close();

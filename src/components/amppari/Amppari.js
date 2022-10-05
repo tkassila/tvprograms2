@@ -3099,7 +3099,12 @@ export default class Amppari extends Component {
 
     if (channels != null) {
       if (tableheaders != null) console.log(tableheaders.length);
-      if (tabletds != null) console.log(tabletds.length);
+      if (Config.bDebug) {
+        console.log("tabletds.length");
+        if (tabletds == null || tabletds == undefined)
+          console.log("tabletds == null || tabletds == undefined");
+        else console.log(tabletds.length);
+      }
     }
     /*
 		if (state.channels != null)

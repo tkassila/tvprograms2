@@ -1,3 +1,5 @@
+import Config from "./Config";
+
 class IsBrowser {
   static isOpera = false;
   static isFirefox = false;
@@ -44,8 +46,10 @@ class IsBrowser {
   static getOperatingSystem() {
     let operatingSystem = "Not known";
     let defos = navigator.appVersion;
-    console.log("defos");
-    console.log(defos);
+    if (Config.bDebug) {
+      console.log("defos");
+      console.log(defos);
+    }
     if (defos.indexOf("Win") !== -1) {
       operatingSystem = "Windows OS";
     }

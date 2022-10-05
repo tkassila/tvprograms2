@@ -48,10 +48,11 @@ class MyDialog extends Component {
 
   open = () => {
     this.dialogRef.current.MDComponent.show();
-    console.log("before closeButtonRef.current.focus");
+    if (Config.bDebug) console.log("before closeButtonRef.current.focus");
     this.closeButtonRef.current.focus();
     // this.dialogRef = document.getElementById("mydialog");
-    console.log("dialog componentDidMount: dialogRef=" + this.dialogRef);
+    if (Config.bDebug)
+      console.log("dialog componentDidMount: dialogRef=" + this.dialogRef);
   };
 
   close = () => {
@@ -67,7 +68,8 @@ class MyDialog extends Component {
 
   okBttnPressed = (event) => {
     event.preventDefault();
-    console.log("dialog okBttnPressed: dialogRef=" + this.dialogRef);
+    if (Config.bDebug)
+      console.log("dialog okBttnPressed: dialogRef=" + this.dialogRef);
     // console.log("this.dialogRef=" +this.dialogRef.visible);
     // this.dialogRef.visible = true;
     this.dialogRef.current.MDComponent.close();
@@ -107,10 +109,12 @@ class MyDialog extends Component {
     */
 
   render(props, state) {
-    console.log("->");
-    console.log(props);
-    console.log(state);
-    console.log("<-");
+    if (Config.bDebug) {
+      console.log("->");
+      console.log(props);
+      console.log(state);
+      console.log("<-");
+    }
 
     return (
       <Fragment>

@@ -144,9 +144,10 @@ function AmppariShowProgram(props) {
     }
   };
 
-  console.log("Amppari ShowProgram.js props");
-  console.log(props);
-
+  if (Config.bDebug) {
+    console.log("Amppari ShowProgram.js props");
+    console.log(props);
+  }
   // <p><a href={props.data.link} target="_blank" >ohjelmalinkki</a></p>onClik={this.openHtmlPage} linkurl={props.data.link}
 
   // +this.getPOfTitleIndex()
