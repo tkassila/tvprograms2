@@ -65,8 +65,10 @@ export default class Amppari2 extends Component {
   arr_selecttyyppi_items = ["kaikki", "elokuvat", "urheilu"];
   arr_selectchanneltypes = ["kaikki", "ilmaiset", "maksulliset"];
   changed = { ind: 0, selected: this.arr_selectchanneltypes[0] };
-  current_programtype = signal(this.arr_selecttyyppi_items[0]);
   current_channeltype = signal(this.changed);
+  changed2 = { ind: 0, selected: this.arr_selecttyyppi_items[0] };
+  current_programtype = signal(this.changed2);
+  fetcheditems = signal([]);
 
   ilmaisetchannelnames = [
     "Yle TV1",
@@ -99,10 +101,11 @@ export default class Amppari2 extends Component {
   programTypeRef = null;
   tablCntl = null;
 
-  fetcheditems = [];
-  channeltypeitems = [];
-  programtypeitems = [];
-  channels = [];
+  // fetcheditems = [];
+  channeltypeitems = signal([]);
+  programtypeitems = signal([]);
+  channels = signal([]);
+
   textSearch = null;
   _mounted = false;
 
@@ -125,14 +128,39 @@ export default class Amppari2 extends Component {
     }
 
     effect(() => {
+      console.log("current_programtype is now", this.current_programtype.value);
+      if (
+        this.current_programtype.value != undefined &&
+        this.store != undefined
+      ) {
+        const value = this.current_programtype.value;
+        const items = this.filterAfterProgramType(value);
+        /*
+        this.setState({
+          selectedTyyppiinindex: ind,
+          selectedtyyppi: selected,
+          channels: items,
+        });
+        */
+        this.store.setState({
+          programtypeitems: items,
+          selectedtyyppi: value,
+        });
+      }
+    });
+
+    effect(() => {
       console.log("current_channeltype is now", this.current_channeltype.value);
-      if (this.current_channeltype.value != undefined) {
+      if (
+        this.current_channeltype.value != undefined &&
+        this.store != undefined
+      ) {
         const filtereditems = this.filterChannesAfterChannelPay(
           this.current_channeltype.value
         );
         if (filtereditems != undefined && filtereditems != null) {
-          this.channeltypeitems = filtereditems;
-          setState({ channeltypeitems: filtereditems });
+          this.channeltypeitems.value = filtereditems;
+          this.setState({ channeltypeitems: filtereditems });
           this.store.setState({ channeltypeitems: filtereditems });
         }
       }
@@ -288,7 +316,7 @@ export default class Amppari2 extends Component {
     const bDisplayAllDescriptions = storestate.bDisplayAllDescriptions;
     const textSearch = storestate.textSearch;
     const selectedTyyppiinindex = storestate.selectedTyyppiinindex;
-    this.channels = channels;
+    this.channels.value = channels;
     this.textSearch = textSearch;
     let store_selectedtyyppi = storestate.selectedtyyppi;
     if (
@@ -641,8 +669,8 @@ export default class Amppari2 extends Component {
       console.log(channelurl);
     }
 
-    this.fetcheditems = [];
-    this.channeltypeitems = [];
+    this.fetcheditems.value = [];
+    this.channeltypeitems.value = [];
     this.store.setState({ fetchitems: [] });
 
     this.setState({
@@ -727,12 +755,12 @@ export default class Amppari2 extends Component {
               console.log("-- 1");
               // console.log(data2);
             }
-            this.fetcheditems = data2;
-            this.channeltypeitems = data2;
+            this.fetcheditems.value = data2;
+            this.channeltypeitems.value = data2;
             // this.programtypeitems = data2;
             // this.channels = data2;
             this.setState({
-              fetcheditems: this.fetcheditems,
+              fetcheditems: this.fetcheditems.value,
               channels: [],
               bUnderFetch: false,
               selectedsuodattimet: "kaikki",
@@ -744,6 +772,7 @@ export default class Amppari2 extends Component {
               bSearchButtonClicked: false,
               selectedchannelindex: 0,
             });
+            this.fetcheditems.value = data2;
             this.store.setState({ fetchitems: data2 });
             // this.filterWhenUIControlsHasBeenChanged(filtercalled.CHANNELTYPE);
             // this.channels = data2;
@@ -757,7 +786,8 @@ export default class Amppari2 extends Component {
 						//this.filterWhenUIControlsHasBeenChanged(filtercalled.CHANNELTYPE);
 						*/
             this.setState({
-              /* fetcheditems: this.fetcheditems, */ channels: this.channels,
+              /* fetcheditems: this.fetcheditems, */ channels:
+                this.channels.value,
               bUnderFetch: false,
               selectedsuodattimet: "kaikki",
               selectedtyyppi: "kaikki",
@@ -1488,7 +1518,7 @@ export default class Amppari2 extends Component {
     } else {
       const st = this.store;
       const storestate = st.getState();
-      this.channels = storestate.channels;
+      this.channels.value = storestate.channels;
       -1;
       this.setState({
         showChannelsAtSameTime: this.const_showChannelsAtSameTime,
@@ -1710,7 +1740,7 @@ export default class Amppari2 extends Component {
 
     const currenttime = new Date();
 
-    let all_channels = this.channels;
+    let all_channels = this.channels.value;
     if (all_channels == null) {
       headers = [];
       channels = [];
@@ -2239,13 +2269,13 @@ export default class Amppari2 extends Component {
     this.setState({
       bSearchButtonClicked: true,
       bDisplayAllDescriptions: true,
-      channels: this.channels,
+      channels: this.channels.value,
     });
     this.forceUpdate();
   };
 
   getMovieOrSportChannels = (selected) => {
-    const fitems = this.channeltypeitems;
+    const fitems = this.channeltypeitems.value;
     if (fitems == null) return null;
     if (selected == undefined || selected == null) return null;
     let ret = null;
@@ -2338,7 +2368,6 @@ export default class Amppari2 extends Component {
 
     // const fitems = this.state.fetcheditems;
     const fitems = this.state.fetcheditems;
-
     if (Config.bDebug) {
       console.log("filterChannesAfterChannelPay");
       console.log("channeltype");
@@ -2412,7 +2441,7 @@ export default class Amppari2 extends Component {
       console.log(chls.length);
     }
 
-    this.channeltypeitems = chls;
+    this.channeltypeitems.value = chls;
     this.setState({ channeltypeitems: chls });
 
     // let chls = this.filterFetchedItemsIntoChannelsAfterSuodin(chtype);
@@ -2452,10 +2481,10 @@ export default class Amppari2 extends Component {
     }
 
     // const fitems = this.state.channeltypeitems;
-    const fitems = this.channeltypeitems;
+    const fitems = this.channeltypeitems.value;
     if (Config.bDebug) {
       console.log("filterAfterProgramType channeltypeitems");
-      console.log(this.channeltypeitems);
+      console.log(this.channeltypeitems.value);
       console.log("channeltypeitems.length");
       console.log(fitems.length);
     }
@@ -2468,13 +2497,13 @@ export default class Amppari2 extends Component {
       items = this.getMovieOrSportChannels(mychange);
     }
 
-    this.programtypeitems = items;
-    this.channels = items;
+    this.programtypeitems.value = items;
+    this.channels.value = items;
     if (Config.bDebug) {
       console.log("programtypeitems");
-      console.log(this.programtypeitems);
+      console.log(this.programtypeitems.value);
       console.log("programtypeitems.length");
-      console.log(this.programtypeitems.length);
+      console.log(this.programtypeitems.value.length);
     }
     /*		
 		if (change !== undefined)
@@ -2500,7 +2529,7 @@ export default class Amppari2 extends Component {
       change.toString().trim().length == 0
     ) {
       this.textSearch = null;
-      this.channels = this.programtypeitems;
+      this.channels.value = this.programtypeitems.value;
       this.setState({ textSearch: null, bSearchButtonClicked: false });
       // this.filterAfterSearch();
       /*
@@ -2532,9 +2561,9 @@ export default class Amppari2 extends Component {
       console.log(mychange);
     }
 
-    this.channels = this.state.programtypeitems;
+    this.channels.value = this.state.programtypeitems.value;
     if (mychange !== undefined || mychange !== null || mychange) {
-      let all_channels = this.channels;
+      let all_channels = this.channels.value;
       //let all_channels = this.channels;
       if (Config.bDebug) {
         console.log("all_channels");
@@ -2696,19 +2725,19 @@ export default class Amppari2 extends Component {
             // if (change == undefined)
             // this.setState({ bSearchButtonClicked: false,
             //	channels: null});
-            this.channels = null;
+            this.channels.value = null;
           } else {
             if (Config.bDebug) {
               console.log("foundedChannels");
-              console.log(this.programtypeitems);
+              console.log(this.programtypeitems.value);
               console.log("foundedChannels.length");
-              console.log(foundedChannels.length);
+              console.log(foundedChannels.value.length);
             }
             /*
 						this.setState({ bSearchButtonClicked: true, 
 							channels: foundedChannels});
 							*/
-            this.channels = foundedChannels;
+            this.channels.value = foundedChannels;
           }
         }
       }
@@ -3008,7 +3037,7 @@ export default class Amppari2 extends Component {
     let chtype = null;
 
     // const fitems = this.state.fetcheditems;
-    const fitems = this.fetchitems;
+    const fitems = this.fetcheditems.value;
 
     if (Config.bDebug) {
       console.log("filterChannesAfterChannelPay");
@@ -3072,7 +3101,7 @@ export default class Amppari2 extends Component {
       console.log(chls.length);
     }
 
-    this.channeltypeitems = chls;
+    this.channeltypeitems.value = chls;
 
     // let chls = this.filterFetchedItemsIntoChannelsAfterSuodin(chtype);
     /*
@@ -3527,6 +3556,15 @@ export default class Amppari2 extends Component {
                   store={this.store}
                   ref={this.channelTypeRef}
                   setRemoverFunction={this.setRemoverFunction}
+                />
+
+                <SignalSelectedValue
+                  disabled={
+                    state.fetcheditems == null || state.fetcheditems.length == 0
+                  }
+                  labeltext="Ohjelmatyyppi"
+                  signalValueChange={this.current_programtype}
+                  selectitems={this.arr_selecttyyppi_items}
                 />
 
                 <SignalSelectedValue
