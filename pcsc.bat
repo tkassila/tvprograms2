@@ -1,1 +1,1 @@
-\java\putty\pscp.exe proxyserver.zip pi@192.168.1.115:/home/pi/
+\java\putty\pscp.exe proxyserver.zip pi@192.168.50.115:/home/pi/
