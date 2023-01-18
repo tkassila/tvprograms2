@@ -49,7 +49,7 @@ const filtercalled = {
   MAKESEARCH: "makesearch",
 };
 
-//let season = seasons.SPRING
+//let season = seasons.SPakRING
 //if (!season) {
 //	throw new Error("Season is not defined")
 //}
@@ -148,7 +148,7 @@ export default class Amppari extends Component {
       bSearchButtonClicked: false,
       bShowTableBorder: false,
       bshowdcurrentprograms: true,
-      themevalue: props.themevalue,
+      themevalue: props.themevalue,     
     };
 
     // https://telkussa.fi/sivu/1/20210215
@@ -2823,6 +2823,13 @@ export default class Amppari extends Component {
     return ret;
   };
 
+  speakScreenReader(text)
+  {
+    document.getElementById("screenreaderdiv").innerHTML = text;
+    this.setState({screenreaderdiv: text })
+  }
+
+
   altPlusKeyUp = (e) => {
     e = e || window.event;
     let keyCode = e.keyCode || e.which,
@@ -2864,20 +2871,45 @@ export default class Amppari extends Component {
         console.log(this.tablCntl.current);
       }
       let currentColInd = null;
+      let path = null;
 
       // .item(0).innerHTML
-      switch (e.key) {
-        case "o":
+      switch (e.key) {        
+        case "r":
+        case "R":
+          path = document.activeElement;
+          if (path) {
+            this.speakScreenReader(path.innerHTML.toString());
+          }
+          break;
+
+        case "c":
+        case "C":
+          path = e.composedPath();
           //... handle alt+o
-          let divInsideOfCol = this.getH3OfCurrentColumn(e.path);
+          divInsideOfCol = this.getH3OfCurrentColumn(path);
+          if (divInsideOfCol) {
+            const channelTextHtml = divInsideOfCol.innerHTML;
+            const channelText = channelTextHtml.toString();
+            this.speakScreenReader(channelText);
+          }
+          break;
+
+        case "o":
+        case "O":
+          //... handle alt+o
+          path = e.composedPath();
+          let divInsideOfCol = this.getH3OfCurrentColumn(path);
           if (divInsideOfCol) {
             divInsideOfCol.focus();
           }
           break;
 
         case "k":
+        case "K":
           //... handle alt+k
-          currentColInd = this.getCurrentColumnIndex(e.path);
+          path = e.composedPath();
+          currentColInd = this.getCurrefntColumnIndex(path);
           if (currentColInd > 0) {
             const prevcol = this.getPrevColumn(cols, currentColInd);
             if (prevcol) {
@@ -2887,8 +2919,10 @@ export default class Amppari extends Component {
           break;
 
         case "s":
+        case "S":
           //... handle alt+s
-          currentColInd = this.getCurrentColumnIndex(e.path);
+          path = e.composedPath();
+          currentColInd = this.getCurrentColumnIndex(path);
           if (currentColInd !== -1 && currentColInd < lenCols - 1) {
             const nextcol = this.getNextColumn(cols, currentColInd);
             // const nextcol = getH3OfCurrentColumn(e.path);
@@ -3434,12 +3468,14 @@ export default class Amppari extends Component {
                     <h3 lang="fi" tabIndex="0">
                       -- Ohjelmataulukko, liikutaan hiirellä tai taulukon
                       sisällä seuraavilla näppäimillä: alt+s = seuraava kanava,
-                      alt+k = edellinen kanava sekä alt+o = kanavan ohjelmiin,
-                      otsakkeeseen. Ohjelman kuvailun saa näkymään tab
-                      näppäimellä ja enterillä tai hiirenklikkauksella. Taulukon
-                      sisällä toimivat myös tab sekä shift-tab näppäimet.
-                      Taulukon yläpuolelle tekstin "Ohjelmataulukko" kohdalle
-                      pääsee komennolla alt+t.
+                      alt+k = edellinen kanava sekä alt+o = liikutaan kanavan otsakkeeseen. 
+                      Myös ensimmäisen kerran/sama kanava on mahdollista painaa al+c:ää, 
+                      jolloin ruudunlukuohjelma sanoo kanavan nimen, mutta selauskohta 
+                      ei muutu. Samoin atl+r:lla toistetaan kerran/ohjelmatieto sen teksti.
+                      Ohjelman kuvailun saa näkymään tab näppäimellä ja enterillä 
+                      tai hiirenklikkauksella. Taulukon sisällä toimivat myös tab 
+                      sekä shift-tab näppäimet. Taulukon yläpuolelle tekstin 
+                      "Ohjelmataulukko" kohdalle pääsee komennolla alt+t.
                     </h3>
                   </div>
                   {state.bSearchButtonClicked && state.textSearch != null
@@ -3480,6 +3516,9 @@ export default class Amppari extends Component {
               </table>
             </section>
           </div>
+          <div id="screenreaderdiv" tabindex="0" aria-live="priority || polite"
+               class="visually-hidden" aria-label={this.state.screenreaderdiv} />
+       
         </div>
       </Fragment>
     );

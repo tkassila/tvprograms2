@@ -2916,20 +2916,25 @@ export default class Amppari2 extends Component {
         console.log(this.tablCntl.current);
       }
       let currentColInd = null;
+      let path = null;
 
       // .item(0).innerHTML
       switch (e.key) {
         case "o":
+        case "O":
           //... handle alt+o
-          let divInsideOfCol = this.getH3OfCurrentColumn(e.path);
+          path = e.composedPath();
+          let divInsideOfCol = this.getH3OfCurrentColumn(path);
           if (divInsideOfCol) {
             divInsideOfCol.focus();
           }
           break;
 
         case "k":
+        case "K":
           //... handle alt+k
-          currentColInd = this.getCurrentColumnIndex(e.path);
+          path = e.composedPath();
+          currentColInd = this.getCurrentColumnIndex(path);
           if (currentColInd > 0) {
             const prevcol = this.getPrevColumn(cols, currentColInd);
             if (prevcol) {
@@ -2939,8 +2944,10 @@ export default class Amppari2 extends Component {
           break;
 
         case "s":
+        case "S":
           //... handle alt+s
-          currentColInd = this.getCurrentColumnIndex(e.path);
+          path = e.composedPath();
+          currentColInd = this.getCurrentColumnIndex(path);
           if (currentColInd !== -1 && currentColInd < lenCols - 1) {
             const nextcol = this.getNextColumn(cols, currentColInd);
             // const nextcol = getH3OfCurrentColumn(e.path);
@@ -3596,8 +3603,11 @@ export default class Amppari2 extends Component {
                     <h3 lang="fi" tabIndex="0">
                       -- Ohjelmataulukko, liikutaan hiirellä tai taulukon
                       sisällä seuraavilla näppäimillä: alt+s = seuraava kanava,
-                      alt+k = edellinen kanava sekä alt+o = kanavan ohjelmiin,
-                      otsakkeeseen. Ohjelman kuvailun saa näkymään tab
+                      alt+k = edellinen kanava sekä alt+o = liikutaan kanavan                       
+                      otsakkeeseen. Myös ensimmäisen kerran/sama kanava on mahdollista
+                      painaa alt+c:ää, jolloin ruudunlukuohjelma sanoo kanavan nimen,
+                      mutta selauskohta ei muutu. Samoin atl+r:lla toistetaan 
+                      kerran/ohjelmatieto sen teksti.  Ohjelman kuvailun saa näkymään tab
                       näppäimellä ja enterillä tai hiirenklikkauksella. Taulukon
                       sisällä toimivat myös tab sekä shift-tab näppäimet.
                       Taulukon yläpuolelle tekstin "Ohjelmataulukko" kohdalle

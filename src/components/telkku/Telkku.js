@@ -81,6 +81,7 @@ export default class Telkku extends Component {
       fetcheddata: null,
       fetcheditems: [],
       sectionwidth: 0,
+      screenreaderdiv: "",
     };
 
     let themevalue = props.themevalue;
@@ -1042,6 +1043,12 @@ export default class Telkku extends Component {
     return ret;
   };
 
+  speakScreenReader(text)
+  {
+    document.getElementById("screenreaderdiv").innerHTML = text;
+    this.setState({screenreaderdiv: text })
+  }
+
   altPlusKeyUp = (e) => {
     e = e || window.event;
     let keyCode = e.keyCode || e.which,
@@ -1082,20 +1089,45 @@ export default class Telkku extends Component {
         console.log(this.tablCntl.current);
       }
       let currentColInd = null;
+      let path = null;
 
       // .item(0).innerHTML
       switch (e.key) {
-        case "o":
+        case "r":
+          case "R":
+            path = document.activeElement;
+            if (path) {
+              this.speakScreenReader(path.innerHTML.toString());
+            }
+            break;
+
+        case "c":
+        case "C":
+            path = e.composedPath();
           //... handle alt+o
-          let divInsideOfCol = this.getH3OfCurrentColumn(e.path);
+          divInsideOfCol = this.getH3OfCurrentColumn(path);
+          if (divInsideOfCol) {
+            const channelTextHtml = divInsideOfCol.innerHTML;
+            const channelText = channelTextHtml.toString();
+            this.speakScreenReader(channelText);
+          }
+          break;
+        
+        case "o":
+        case "O":
+          //... handle alt+o
+          path = e.composedPath();
+          let divInsideOfCol = this.getH3OfCurrentColumn(path);
           if (divInsideOfCol) {
             divInsideOfCol.focus();
           }
           break;
 
         case "k":
+        case "K":
           //... handle alt+k
-          currentColInd = this.getCurrentColumnIndex(e.path);
+          path = e.composedPath();
+          currentColInd = this.getCurrentColumnIndex(path);
           if (currentColInd !== -1 && currentColInd > 0) {
             const prevcol = this.getPrevColumn(cols, currentColInd);
             if (prevcol) {
@@ -1107,7 +1139,8 @@ export default class Telkku extends Component {
         case "s":
         case "S":
           //... handle alt+s
-          currentColInd = this.getCurrentColumnIndex(e.path);
+          path = e.composedPath();
+          currentColInd = this.getCurrentColumnIndex(path);
           if (currentColInd !== -1 && currentColInd < lenCols - 1) {
             const nextcol = this.getNextColumn(cols, currentColInd);
             // document.getElementById("tablecol" +(currentColInd+1)).focus();
@@ -1465,13 +1498,16 @@ export default class Telkku extends Component {
                 <div class={style.cardHeader}>
                   <h3 lang="fi" tabIndex="0">
                     -- Ohjelmataulukko, liikutaan hiirellä tai taulukon sisällä
-                    seuraavilla näppäimillä: alt+e = seuraava kanava, alt+k =
-                    edellinen kanava sekä alt+o = kanavan ohjelmiin,
-                    otsakkeeseen. Ohjelman kuvailun saa näkymään tab näppäimellä
-                    ja enterillä tai hiirenklikkauksella. Taulukon sisällä
-                    toimivat myös tab sekä shift-tab näppäimet. Taulukon
-                    yläpuolelle tekstin "Ohjelmataulukko" kohdalle pääsee
-                    komennolla alt+t.
+                    seuraavilla näppäimillä: alt+s = seuraava kanava, alt+k =
+                    edellinen kanava sekä alt+o = liikutaan kanavan otsakkeeseen.
+                    Myös ensimmäisen kerran/sama kanava on mahdollista
+                    painaa alt+c:ää, jolloin ruudunlukuohjelma sanoo kanavan nimen, mutta 
+                    selauskohta ei muutu. Samoin atl+r:lla toistetaan 
+                    kerran/ohjelmatieto sen teksti. Ohjelman kuvailun saa näkymään tab 
+                    näppäimellä ja enterillä tai hiirenklikkauksella. 
+                    Taulukon sisällä toimivat myös tab sekä shift-tab 
+                    näppäimet. Taulukon yläpuolelle tekstin "Ohjelmataulukko" 
+                    kohdalle pääsee komennolla alt+t.
                   </h3>
                 </div>
                 {state.bSearchButtonClicked && state.textSearch != null
@@ -1513,6 +1549,9 @@ export default class Telkku extends Component {
               </div>
             </div>
           </Dialog>
+          <div id="screenreaderdiv" tabindex="0" aria-live="priority || polite"
+               class="visually-hidden" aria-label={this.state.screenreaderdiv} />
+       
         </div>
       </Fragment>
     );
