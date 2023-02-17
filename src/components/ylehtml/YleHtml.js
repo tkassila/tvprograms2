@@ -145,6 +145,9 @@ export default class YleHtml extends Component {
       themevalue: themevalue,
       bshowdcurrentprograms: true,
       screenreaderdiv: "",
+      hideButton: false,
+      hideButtonText: 'Piilota ohje',
+
     };
 
     this.schedules = null;
@@ -1545,6 +1548,10 @@ export default class YleHtml extends Component {
 
   prevChannelSetClicked = (event) => {
     event.preventDefault();
+    this.setPrevChannelSet();
+  };
+
+  setPrevChannelSet = () => {
     if (this.state.schedules == null || this.state.schedules.length == 0)
       return;
     if (this.state.currentChannelSetIndex < 0) {
@@ -1561,6 +1568,7 @@ export default class YleHtml extends Component {
       currentChannelSetIndex: this.state.currentChannelSetIndex - 1,
     });
   };
+
 
   abortFetchClicked = (event) => {
     event.preventDefault();
@@ -1742,6 +1750,10 @@ export default class YleHtml extends Component {
 
   nextChannelSetClicked = (event) => {
     event.preventDefault();
+    this.setNextChannelSet();
+  };
+
+  setNextChannelSet = () => {
     if (this.state.schedules == null || this.state.schedules.length == 0)
       return;
     if (
@@ -2181,22 +2193,31 @@ export default class YleHtml extends Component {
 		*/
   };
 
+  doWhichKey = (e) => { 
+    e = e || window.event; 
+    let charCode = e.keyCode || e.which; 
+    return String.fromCharCode(charCode); 
+  } 
+
   altPlusKeyUpProgramHeader = (e) => {
+    let chrPressed = this.doWhichKey(e);
     e = e || window.event;
+    console.log("chrPressed");
+    console.log(chrPressed);
     let keyCode = e.keyCode || e.which,
       arrow = { left: 37, up: 38, right: 39, down: 40 };
     if (Config.bDebug) console.log("pressed");
     if (e.altKey) {
-      if (Config.bDebug) {
+      if (Config.bDebug) {        
+        console.log("chrPressed");
+        console.log(chrPressed);
+        console.log("e");
+        console.log(e);
         console.log("control key");
         console.log("e.altKey");
         console.log(e.altKey);
         console.log("keyCode");
         console.log(keyCode);
-        console.log("e.keyCode");
-        console.log(e.keyCode);
-        console.log("e");
-        console.log(e);
       }
 
       // .item(0).innerHTML
@@ -2205,10 +2226,42 @@ export default class YleHtml extends Component {
         case "M":
           //... handle alt+t
           if (document.getElementById("idprogramtableh3")) {
-            let divh3 = document.getElementById("idprogramtableh3");
+              let divh3 = document.getElementById("idprogramtableh3");
             if (divh3) divh3.focus();
           }
           break;
+          case "n":
+          case "N":  
+                //... handle alt+t
+                if (document.getElementById("divControl")) {
+                  let divh3 = document.getElementById("divControl");
+                  if (divh3) divh3.focus();
+                }
+                break;
+          case "i":
+          case "I":  
+                //... handle alt+t
+                if (document.getElementById("divDays")) {
+                  let divh3 = document.getElementById("divDays");
+                  if (divh3) divh3.focus();
+              }
+              break;                        
+        case "j":
+        case "J":
+             this.nextChannelSetClicked(e);            
+     //         if (document.getElementById("button_next_channel_page")) {
+//              let buttonNext = document.getElementById("button_next_channel_page");
+//              if (buttonNext) buttonNext.click();
+    //        }
+          break;
+        case "g":
+        case "G":
+              this.prevChannelSetClicked(e);
+         //  if (document.getElementById("button_prev_channel_page")) {
+//              let buttonPrev = document.getElementById("button_prev_channel_page");
+//              if (buttonPrev) buttonPrev.click();
+       //    }
+           break;
         default:
           return this.altPlusKeyUp(e); 
           break;  
@@ -2219,6 +2272,18 @@ export default class YleHtml extends Component {
   getSectionWidthCss = () => {
     return "width: " + this.section_width + "px;";
   };
+
+  buttonHidePressed = (e) => {
+    let bValue = !this.state.hideButton;
+    var x = document.getElementById("hideDiv");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+    this.setState({ hideButton: bValue, hideButtonText: bValue ? "Näytä ohje" : "Piilota ohje" });
+  }
+
 
   render(props, state) {
     const buttoninputw =
@@ -2392,7 +2457,7 @@ export default class YleHtml extends Component {
     return (
       <Fragment>
         <div id="idylehtml" style={this.divDialogStyle} 
-            onKeyUp={this.altPlusKeyUpProgramHeader}>
+            onKeyDown={this.altPlusKeyUpProgramHeader}>
           <div
             class={style.cardHeader}            
           >
@@ -2446,11 +2511,11 @@ export default class YleHtml extends Component {
               }
             >
               <div class={style.cardHeader}>
-                <p lang="fi" tabIndex="0">
+                <p lang="fi" tabIndex="0" id="divDays">
                   Hae ohjelmatiedot alimpaan taulukkoon alla olevan päivämäärän
                   mukaan:
                 </p>
-                <div class={style.cardHeader}>
+                <div class={style.cardHeader} >
                   <a
                     href="."
                     id={"dayname_" + this.getPlus1DayId(0)}
@@ -2768,10 +2833,10 @@ export default class YleHtml extends Component {
                 tabIndex="0"
                 aria-labelled="Miten ohjelmatiedot näytetään"
               >
-                <div style={{ "background-color": "red", color: "yellow" }}>
+                <div style={{ "background-color": "red", color: "yellow" }} tabIndex="0">
                   {state.errmsg}
                 </div>
-                <div class=" mdc-typography--caption">
+                <div class=" mdc-typography--caption" tabIndex="0" id="divControl">
                   Miten ohjelmatiedot näytetään:
                 </div>
               </div>
@@ -2791,6 +2856,7 @@ export default class YleHtml extends Component {
                       tabIndex="0"
                       aria-label="Aikaisemmat kanavat"
                       style={buttoninputw}
+                      id="button_prev_channel_page"
                       onClick={this.prevChannelSetClicked}
                       text="&lt;"
                     ></Button>
@@ -2807,6 +2873,7 @@ export default class YleHtml extends Component {
                       lang="fi"
                       aria-label="Seuraavat kanavat"
                       style={buttoninputw}
+                      id="button_next_channel_page"
                       onClick={this.nextChannelSetClicked}
                       text="&gt;"
                     ></Button>
@@ -2960,10 +3027,21 @@ export default class YleHtml extends Component {
               <div>
                 <div class=" mdc-typography--caption">
                   <h3 id="idprogramtableh3" tabIndex="0">
-                    Ohjelmataulukko
+                  Ohjelmataulukko&emsp;
+                    <Button
+                    lang="fi"
+                    ripple
+                    raised
+                    style={buttoninputw}
+                    text={state.hideButtonText}
+                    id="buttonHide"
+                    onClick={this.buttonHidePressed}
+                    aria-label="Näytä/Piilota teksi"
+                  ></Button>
+
                   </h3>
                 </div>       
-                  <div class=" mdc-typography--caption">
+                  <div class=" mdc-typography--caption" id="hideDiv">
                     <h3 lang="fi" tabIndex="0">
                       -- Ohjelmataulukko, liikutaan hiirellä tai taulukon
                       sisällä seuraavilla näppäimillä alt+a = seuraava kanava,
@@ -2975,7 +3053,11 @@ export default class YleHtml extends Component {
                       näppäimellä ja enterillä tai hiirenklikkauksella. Taulukon
                       sisällä toimivat myös tab sekä shift-tab näppäimet.
                       Taulukon yläpuolelle tekstin "Ohjelmataulukko" kohdalle
-                      pääsee komennolla alt+m.
+                      pääsee komennolla alt+m. Myös seuraavat 
+                      näppäimet toimivat, kun kanavia enemmän kuin taulukossa näytetään: 
+                      edelliset kanavat: alt+g ja seuraavat kanavat: alt+j. Alt+i vie suoraan
+                      päiväkohtaisten hakulinkkien yläpuolelle. Alt+n vie suoraan
+                      miten taulukon ohjelmatiedot näytetään yläpuolelle.
                     </h3>
                   </div>
                 

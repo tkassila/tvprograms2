@@ -150,6 +150,8 @@ export default class Amppari extends Component {
       bShowTableBorder: false,
       bshowdcurrentprograms: true,
       themevalue: props.themevalue,     
+      hideButton: false,
+      hideButtonText: 'Piilota ohje',
     };
 
     // https://telkussa.fi/sivu/1/20210215
@@ -3023,6 +3025,38 @@ export default class Amppari extends Component {
             if (divh3) divh3.focus();
           }
           break;
+          case "n":
+          case "N":  
+              //... handle alt+t
+              if (document.getElementById("divControl")) {
+                let divh3 = document.getElementById("divControl");
+                if (divh3) divh3.focus();
+              }
+              break;
+              case "i":
+                case "I":  
+                      //... handle alt+t
+                      if (document.getElementById("divDays")) {
+                        let divh3 = document.getElementById("divDays");
+                        if (divh3) divh3.focus();
+                    }
+                    break;          
+          case "j":
+          case "J":
+                 this.nextChannelSetClicked(e);            
+         //         if (document.getElementById("button_next_channel_page")) {
+    //              let buttonNext = document.getElementById("button_next_channel_page");
+    //              if (buttonNext) buttonNext.click();
+        //        }
+              break;
+            case "g":
+            case "G":
+                  this.prevChannelSetClicked(e);
+             //  if (document.getElementById("button_prev_channel_page")) {
+    //              let buttonPrev = document.getElementById("button_prev_channel_page");
+    //              if (buttonPrev) buttonPrev.click();
+           //    }
+               break;
           default:
             return this.altPlusKeyUp(e); 
             break;  
@@ -3033,6 +3067,17 @@ export default class Amppari extends Component {
   getSectionWidthCss = () => {
     return "width: " + this.section_width + "px;";
   };
+
+  buttonHidePressed = (e) => {
+    let bValue = !this.state.hideButton;
+    var x = document.getElementById("hideDiv");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+    this.setState({ hideButton: bValue, hideButtonText: bValue ? "Näytä ohje" : "Piilota ohje" });
+  }
 
   render(props, state) {
     if (Config.bDebug) {
@@ -3204,7 +3249,7 @@ export default class Amppari extends Component {
               }
             >
               <div class={style.cardHeader}>
-                <div lang="fi" tabIndex="0">
+                <div lang="fi" tabIndex="0" id="divDays">
                   Hae tv-ohjelmatiedot alimpaan taulukkoon alla olevan
                   päivämäärän mukaan:
                 </div>
@@ -3314,10 +3359,10 @@ export default class Amppari extends Component {
                   tabIndex="0"
                   aria-labelled="Miten ohjelmatiedot näytetään"
                 >
-                  <div style={{ "background-color": "red", color: "yellow" }}>
+                  <div style={{ "background-color": "red", color: "yellow" }} tabIndex="0">
                     {state.errmsg}
                   </div>
-                  <div class=" mdc-typography--caption">
+                  <div class=" mdc-typography--caption" tabIndex="0" id="divControl">
                     Miten ohjelmatiedot näytetään:
                   </div>
                 </div>
@@ -3485,9 +3530,21 @@ export default class Amppari extends Component {
                 </div>
                 <div class=" mdc-typography--caption">
                   <h3 id="idprogramtableh3" lang="fi" tabIndex="0">
-                    Ohjelmataulukko
+                    Ohjelmataulukko&emsp;
+                    <Button
+                    lang="fi"
+                    ripple
+                    raised
+                    style={buttoninputw}
+                    text={state.hideButtonText}
+                    id="buttonHide"
+                    onClick={this.buttonHidePressed}
+                    aria-label="Näytä/Piilota teksi"
+                  ></Button>
+
                   </h3>
-                  <div class={style.cardHeader}>
+
+                  <div class={style.cardHeader} style={state.hideButton} id="hideDiv">
                     <h3 lang="fi" tabIndex="0">
                       -- Ohjelmataulukko, liikutaan hiirellä tai taulukon
                       sisällä seuraavilla näppäimillä: alt+a = seuraava kanava,
@@ -3498,7 +3555,11 @@ export default class Amppari extends Component {
                       Ohjelman kuvailun saa näkymään tab näppäimellä ja enterillä 
                       tai hiirenklikkauksella. Taulukon sisällä toimivat myös tab 
                       sekä shift-tab näppäimet. Taulukon yläpuolelle tekstin 
-                      "Ohjelmataulukko" kohdalle pääsee komennolla alt+m.
+                      "Ohjelmataulukko" kohdalle pääsee komennolla alt+m. Myös seuraavat 
+                      näppäimet toimivat, kun kanavia enemmän kuin taulukossa näytetään: 
+                      edelliset kanavat: alt+g ja seuraavat kanavat: alt+j. Alt+i vie 
+                      suoraan päiväkohtaisten hakulinkkien yläpuolelle. Alt+n vie suoraan
+                      miten taulukon ohjelmatiedot näytetään yläpuolelle.
                     </h3>
                   </div>
                   {state.bSearchButtonClicked && state.textSearch != null

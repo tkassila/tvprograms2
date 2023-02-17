@@ -3409,10 +3409,10 @@ export default class Amppari2 extends Component {
                   tabIndex="0"
                   aria-labelled="Miten ohjelmatiedot näytetään"
                 >
-                  <div style={{ "background-color": "red", color: "yellow" }}>
+                  <div style={{ "background-color": "red", color: "yellow" }} tabIndex="0">
                     {state.errmsg}
                   </div>
-                  <div class=" mdc-typography--caption">
+                  <div class=" mdc-typography--caption" tabIndex="0" id="divControl">
                     Miten ohjelmatiedot näytetään:
                   </div>
                 </div>

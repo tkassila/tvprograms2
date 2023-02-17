@@ -61,7 +61,7 @@ const Button = (props) => {
 		return(	
             <Fragment>
                 <button type="primary" onClick={props.onClick} tabIndex="0"
-                disabled={props.disabled}
+                disabled={props.disabled} id={ props.id ? props.id : buttonid}
 				style={props.style !== undefined ? props.style +" height: 30px; background: blue; " : " height: 30px; background: blue; "} 
 				class={props.class !== undefined ? props.class : null} 
 				>{props.text}
