@@ -1,10 +1,11 @@
 import { h, Component, createRef, render } from "preact";
-// import { route, Router } from 'preact-router';
-import { Route, Router } from "wouter-preact";
+import { route, Router } from 'preact-router';
+// import { Route, Router } from "wouter-preact";
 // import Match from 'preact-router/match';
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createContext } from "preact";
 
-import Header from "./header";
+import Header from "./header/header";
 import Profile from "../routes/profile";
 import NotFound from "../routes/404";
 // import Home from 'async!../routes/home';
@@ -13,7 +14,7 @@ import Config from "../utils/Config";
 import IsBrowser from "../utils/IsBrowser";
 import store from "../utils/store";
 import Media from "../utils/Media";
-import { Provider, connect } from "../unistore/integrations/preact";
+// import { Provider, connect } from "../unistore/integrations/preact";
 //import Typography from 'preact-material-components/Typography';
 //import 'preact-material-components/Typography/style.css';
 
@@ -25,14 +26,15 @@ import HtmlTelkkuRoute from "../routes/telkkuhtml/HtmlTelkkuRoute";
 import HtmlAmppariRoute from "../routes/ampparihtml/HtmlAmppariRoute";
 // import { useMediaQuery } from 'react-responsive';
 //import '../style'
-//import './AppBackgroundBlack.css'
+import './AppBackgroundWhite.css'
 
-import makeMatcher from "wouter-preact/matcher";
-const defaultMatcher = makeMatcher();
+// import makeMatcher from "wouter-preact/matcher";
+// const defaultMatcher = makeMatcher();
 
 /*
  * A custom routing matcher function that supports multipath routes
  */
+/*
 const multipathMatcher = (patterns, path) => {
   for (let pattern of [patterns].flat()) {
     const [match, params] = defaultMatcher(pattern, path);
@@ -41,8 +43,10 @@ const multipathMatcher = (patterns, path) => {
 
   return [false, null];
 };
+*/
 
 export default class App extends Component {
+  ContextStore = null;
   unsubscribelistener = null;
   currentProgsourceCntrl = null;
   ctrlYleRef = null;
@@ -64,19 +68,23 @@ export default class App extends Component {
     innerWidth = window.innerWidth; // document.querySelector("#height");
 
     this.state = {
+      themeChange: false,
       innerHeight: innerHeight,
       innerWidth: innerWidth,
       old_innerHeight: innerHeight,
       old_innerWidth: innerWidth,
       innerWidth_change: 0,
       yleapiparams: "?app_id=" + Config.yleapi + "&app_key=" + Config.ylekey,
-      currentUrl: "/amppari",
+      currentUrl: "/",
       currentProgsourceCntrl: null,
       themevalue: "",
       componentDidMount: false,
     };
 
-    Config.bDebug = false;
+   // this.ContextStore = createContext(store);
+
+   // Config.bDebug = false;
+   Config.bDebug = true;
 
     if (Config.bDebug) {
       console.log("app state");
@@ -89,12 +97,15 @@ export default class App extends Component {
     console.log(Media.screen.isRretinaOrBigger_2d);
     console.log("window.styleMedia.type");
     Config.setOwnserveraddress(location.hostname, location.host);
-    IsBrowser.whichBrowser();
+    console.log("IsBrowser.whichBrowser();");
+   IsBrowser.whichBrowser();
+   console.log("this.store = store;");
     this.store = store;
+    console.log("after this.store = store;");
 
     if (Config.bDebug) {
       console.log("Isbrowser.---:");
-      console.log(store.getState().isbrowser.isChrome);
+     // console.log(this.store.getState().isbrowser.isChrome);
 
       console.log("Isbrowser.isChrome:");
       console.log(IsBrowser.isChrome);
@@ -108,7 +119,9 @@ export default class App extends Component {
       console.log(IsBrowser.OS);
     }
 
-    store.setState({ isbrowser: IsBrowser, darkstyle: "" });
+    console.log("this.store.setState({ isbrowser:  IsBrowser, darkstyle});");
+    this.store.setState({ isbrowser:  IsBrowser, darkstyle: "" });
+    console.log("after this.store.setState({ isbrowser:  IsBrowser, darkstyle});");
 
     if (Config.bDebug) console.log("Config");
     // console.log(Config);
@@ -139,7 +152,9 @@ export default class App extends Component {
     //	document.body.style = 'background: red;';
 
     // window.addEventListener("resize", this.resize_end);
-    this.addEvent(window, "resize", this.reportWindowSize, true);
+  //  console.log("this.addEvent(window, resize, this.reportWindowSize, true);");
+  //  this.addEvent(window, "resize", this.reportWindowSize, true);
+  //  console.log("after this.addEvent(window, resize, this.reportWindowSize, true);");
   }
 
   /*
@@ -243,6 +258,58 @@ export default class App extends Component {
     });
   };
 
+  toggleDarkTheme = () => {
+    //	if (this._underSwitchChange)
+    //		return true;
+
+    // document.body.style = 'max-height: 100%; background-color: red; height: 100vh';
+
+    const bValue = !this.state.themeChange;
+    let themeValue = this.state.themevalue;
+    if (bValue) {
+      document.body.classList.add("mdc-theme--dark");
+      themeValue = "--dark";
+    } else {
+      document.body.classList.remove("mdc-theme--dark");    
+      themeValue = "";
+    }
+
+    this.setState(
+      {
+        themeChange: bValue, themevalue: themeValue,
+      }
+    );
+    this.store.setState({ darkstyle: themeValue });
+
+
+  };
+
+  getPathOfRadioProgSourceChanged = (id) => {
+    let ret = null;
+    switch (id) {
+      case "radio_yle":
+        ret = "/";
+        break;
+      case "radio_telkku":
+        ret = "/telkku";
+        break;
+      case "radio_telkkuhtml":
+        ret = "/htmltelkku";
+        break;
+      case "radio_amppari":
+        ret = "/amppari";
+        break;
+      case "radio_htmlamppari":
+        ret = "/htmlamppari";
+        break;
+      default:
+        ret = "/yle";
+        break;
+    }
+    return ret;
+  };
+
+
   listenerStoreChange2 = (storestate) => {
     if (Config.bDebug) {
       console.log("app.js listenerStoreChange2");
@@ -257,8 +324,8 @@ export default class App extends Component {
     if (newlocation) {
       let data = {};
       data.url = newlocation;
-      this.handleRoute(data);
-      this.setState({ currentUrl: newlocation });
+      this.handleUri(data);
+      // this.setState({ currentUrl: newlocation });
     }
   };
 
@@ -268,6 +335,7 @@ export default class App extends Component {
       this.unsubscribelistener = null;
     }
   };
+
   componentWillUnmount() {
     this.removelisteners();
     //	this.setState({});
@@ -277,12 +345,15 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    /* @babel/plugin-transform-react-jsx-source
+
     let keys = [];
     keys.push("newlocation");
     this.unsubscribelistener = this.store.subscribeAttributeNameListener(
       keys,
       (state) => this.listenerStoreChange2(state)
     );
+    */
 
     this.state.componentDidMount = true;
     const uri = document.documentURI;
@@ -298,7 +369,11 @@ export default class App extends Component {
       }
       //	route(modUri);
     }
-    this.themeChange("");
+  //  this.themeChange("");
+
+    console.log("this.addEvent(window, resize, this.reportWindowSize, true);");
+    this.addEvent(window, "resize", this.reportWindowSize, true);
+    console.log("after this.addEvent(window, resize, this.reportWindowSize, true);");
     //	this.state.currentProgsourceCntrl = this.ctrlYleRef;
     // this.state.currentUrl = '/';
     //	this.headerRef.toggleDarkTheme();
@@ -310,33 +385,7 @@ export default class App extends Component {
    */
   handleRoute = async (e) => {
     if (Config.bDebug) console.log("app.js handleRoute");
-
-    if (e == null || e == undefined /* || !this.state.componentDidMount */)
-      return;
-
-    if (e.url === undefined || e.url === null) return;
-
-    switch (e.url) {
-      case "/":
-        this.state.currentProgsourceCntrl = this.ctrlYleRef;
-        break;
-      case "/telkku":
-        this.state.currentProgsourceCntrl = this.ctrlTelkkuRef;
-        break;
-      case "/htmltelkku":
-        this.state.currentProgsourceCntrl = this.ctrlHtmlTelkkuRef;
-        break;
-      case "/amppari":
-        this.state.currentProgsourceCntrl = this.ctrlAmppariRef;
-        break;
-      case "/htmlamppari":
-        this.state.currentProgsourceCntrl = this.ctrlHtmlAmppariRef;
-        break;
-      default:
-        this.state.currentProgsourceCntrl = this.ctrlYleRef;
-        break;
-    }
-
+    this.handleUri(e);
     /*
 		this.setState({
 			currentUrl: e.url
@@ -345,6 +394,38 @@ export default class App extends Component {
     // route(e.url);
   };
 
+  handleUri = (e) => {
+      if (e == null || e == undefined /* || !this.state.componentDidMount */)
+      return;
+
+    if (e.url === undefined || e.url === null) return;
+
+    switch (e.url) {
+      case "/":
+        this.currentProgsourceCntrl = this.ctrlYleRef;
+        break;
+      case "/telkku":
+        this.currentProgsourceCntrl = this.ctrlTelkkuRef;
+        break;
+      case "/htmltelkku":
+        this.currentProgsourceCntrl = this.ctrlHtmlTelkkuRef;
+        break;
+      case "/amppari":
+        this.currentProgsourceCntrl = this.ctrlAmppariRef;
+        break;
+      case "/htmlamppari":
+        this.currentProgsourceCntrl = this.ctrlHtmlAmppariRef;
+        break;
+      default:
+        this.currentProgsourceCntrl = this.ctrlYleRef;
+        break;
+    }
+
+    this.setState({ currentUrl: e.url, currentProgsourceCntrl: this.currentProgsourceCntrl });
+
+  }
+
+  
   // 					<Home path="/" yleapiparams={state.yleapiparams} store={store} />
 
   /*
@@ -452,10 +533,19 @@ export default class App extends Component {
 			cntrlRoute = this.getImportHtmlAmppariRoute();
 		*/
 
+    /*
+    if (state.themeChange) {
+      import("./AppBackgroundBlack.css");
+    } else {
+    }
+    */
     // console.log("start App.js render 2");
+    console.log("before app render return");
+
+    //       <Provider store={this.store}>
+    //         <this.ContextStore.Provider value={this.store}>
 
     return (
-      <Provider store={store}>
         <div
           id="app"
           style={
@@ -464,62 +554,113 @@ export default class App extends Component {
           }
         >
           <Header
-            selectedRoute={state.currentUrl}
-            store={store}
+            selectedRoute={state.currentUrl}  
             currentProgsourceCntrl={state.currentProgsourceCntrl}
             themeChange={this.themeChange}
+            darkThemeEnabled={state.themeChange}
+            toggleDarkTheme={this.toggleDarkTheme}
           />
+           <br/> <br/>
+          <Router onChange={this.handleRoute}>        
+              <HtmlAmppariRoute
+                path="/htmlamppari"
+                store={this.store}
+                ref={this.ctrlHtmlAmppariRef}
+                themevalue={state.themevalue}
+              />    
+              
+              <HtmlTelkkuRoute
+                path="/htmltelkku"
+                store={this.store}
+                ref={this.ctrlHtmlAmppariRef}
+                themevalue={state.themevalue}
+              />  
 
-          <Router matcher={multipathMatcher}>
-            <Route path={["/telkku"]}>
               <TelkkuRoute
                 path="/telkku"
-                store={store}
+                store={this.store}
                 ref={this.ctrlTelkkuRef}
                 themevalue={state.themevalue}
               />
-            </Route>
-            <Route path={["/"]}>
+              
+              <AmppariRoute
+                type="text/partytown"
+                path="/amppari"
+                store={this.store}
+                ref={this.ctrlAmppariRef}
+                themevalue={state.themevalue}
+              />
+
               <YleRoute
                 type="text/partytown"
                 path="/"
-                store={store}
+                store={this.store}
                 ref={this.ctrlYleRef}
                 themevalue={state.themevalue}
                 innerWidth_change={state.innerWidth_change}
               />
+          
+          </Router>
+        </div>
+        
+    ); // 				</Typography>  </Provider> </this.ContextStore.Provider>
+  }
+}
+
+/*    <Header
+            selectedRoute={state.currentUrl}  
+            store={this.store}
+            currentProgsourceCntrl={state.currentProgsourceCntrl}
+            themeChange={this.themeChange}
+          />
+
+<Router matcher={multipathMatcher}>
+    <Route path={["/htmltelkku"]}>
+            <Route path={["/htmlamppari"]}>       
             </Route>
+                    <Route path={["/telkku"]}>
             <Route path={["/amppari"]}>
-              <AmppariRoute
+            <Route path={["/"]}>
+    
+      <HtmlAmppariRoute
+                path="/htmlamppari"
+                store={this.store}
+                ref={this.ctrlHtmlAmppariRef}
+                themevalue={state.themevalue}
+              />    
+              
+                   <HtmlTelkkuRoute
+                path="/htmltelkku"
+                store={this.store}
+                ref={this.ctrlHtmlAmppariRef}
+                themevalue={state.themevalue}
+              />  
+
+              <TelkkuRoute
+                path="/telkku"
+                store={this.store}
+                ref={this.ctrlTelkkuRef}
+                themevalue={state.themevalue}
+              />
+              
+     <AmppariRoute
                 type="text/partytown"
                 path="/amppari"
-                store={store}
+                store={this.store}
                 ref={this.ctrlAmppariRef}
                 themevalue={state.themevalue}
               />
-            </Route>
-            <Route path={["/htmltelkku"]}>
-              <HtmlTelkkuRoute
-                path="/htmltelkku"
-                store={store}
-                ref={this.ctrlHtmlAmppariRef}
+
+     <YleRoute
+                type="text/partytown"
+                path="/"
+                store={this.store}
+                ref={this.ctrlYleRef}
                 themevalue={state.themevalue}
+                innerWidth_change={state.innerWidth_change}
               />
-            </Route>
-            <Route path={["/htmlamppari"]}>
-              <HtmlAmppariRoute
-                path="/htmlamppari"
-                store={store}
-                ref={this.ctrlHtmlAmppariRef}
-                themevalue={state.themevalue}
-              />
-            </Route>
-          </Router>
-        </div>
-      </Provider>
-    ); // 				</Typography>
-  }
-}
+                   
+*/
 
 /*
 	<Provider store={store}>

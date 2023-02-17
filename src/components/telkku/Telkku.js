@@ -21,7 +21,7 @@ import Button from "../button/Button";
 //import 'preact-material-components/Dialog/style.css';
 //import 'preact-material-components/Theme/style.css';
 
-import HTMLComment from "react-html-comment";
+// import HTMLComment from "react-html-comment";
 
 //import Dialog from "../dialog/Dialog";
 import Dialog from "../dialog/PreactDialog";
@@ -30,7 +30,7 @@ import SwitchCheckbox from "../checkbox/CheckBox";
 import AbortController from "abort-controller";
 import style from "./style";
 import Config from "../../utils/Config";
-// import fetchJsonp from 'fetch-jsonp';
+// imporpotcat fetchJsonp from 'fetch-jsonp';
 import RssTelkkuChannel from "./RssTelkkuChannel";
 
 export default class Telkku extends Component {
@@ -88,7 +88,7 @@ export default class Telkku extends Component {
     this.sectionStyle =
       themevalue !== undefined && themevalue !== ""
         ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; " +
-          (this.this.section_width_css == undefined
+          (this.section_width_css == undefined
             ? ""
             : this.section_width_css)
         : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;" +
@@ -138,11 +138,15 @@ export default class Telkku extends Component {
     this.abortController = new AbortController(); // 1
     this.abortSignal = this.abortController.signal; // 2
     this._mounted = true;
-    if (document.getElementById("programtable"))
-      document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
+ //   if (document.getElementById("programtable"))
+   //   document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
     this.section_width = this.sectionRef.current.offsetWidth;
     //	this.fetchRssTelkkuPrograms();
     if (Config.bDebug) console.log("kissa");
+    /*
+    let aField = document.getElementById('focus_1_element'); 
+    if (aField) aField.focus(); 
+    */
   }
 
   getSectionWidthCss = () => {
@@ -1095,26 +1099,30 @@ export default class Telkku extends Component {
       switch (e.key) {
         case "r":
           case "R":
+            e.preventDefault();
             path = document.activeElement;
-            if (path) {
+            if (path && path.innerHTML) {
               this.speakScreenReader(path.innerHTML.toString());
             }
             break;
 
         case "c":
         case "C":
+          e.preventDefault();
             path = e.composedPath();
           //... handle alt+o
           divInsideOfCol = this.getH3OfCurrentColumn(path);
           if (divInsideOfCol) {
             const channelTextHtml = divInsideOfCol.innerHTML;
             const channelText = channelTextHtml.toString();
-            this.speakScreenReader(channelText);
+            if (channelText)
+              this.speakScreenReader(channelText);
           }
           break;
         
         case "o":
         case "O":
+          e.preventDefault();
           //... handle alt+o
           path = e.composedPath();
           let divInsideOfCol = this.getH3OfCurrentColumn(path);
@@ -1125,6 +1133,7 @@ export default class Telkku extends Component {
 
         case "k":
         case "K":
+          e.preventDefault();
           //... handle alt+k
           path = e.composedPath();
           currentColInd = this.getCurrentColumnIndex(path);
@@ -1136,9 +1145,10 @@ export default class Telkku extends Component {
           }
           break;
 
-        case "s":
-        case "S":
+        case "a":
+        case "A":
           //... handle alt+s
+          e.preventDefault();
           path = e.composedPath();
           currentColInd = this.getCurrentColumnIndex(path);
           if (currentColInd !== -1 && currentColInd < lenCols - 1) {
@@ -1164,7 +1174,7 @@ export default class Telkku extends Component {
       arrow = { left: 37, up: 38, right: 39, down: 40 };
 
     console.log("pressed");
-    if (e.altKey) {
+  if (e.altKey) {
       if (Config.bDebug) {
         console.log("control key");
         console.log("e.altKey");
@@ -1179,13 +1189,17 @@ export default class Telkku extends Component {
 
       // .item(0).innerHTML
       switch (e.key) {
-        case "t":
-          //... handle alt+t
+        case "m":
+        case "M":
+            //... handle alt+t
           if (document.getElementById("idprogramtableh3")) {
             let divh3 = document.getElementById("idprogramtableh3");
             if (divh3) divh3.focus();
           }
           break;
+          default:
+            return this.altPlusKeyUp(e); 
+            break;  
       }
     }
   };
@@ -1280,12 +1294,12 @@ export default class Telkku extends Component {
 
     return (
       <Fragment>
-        <div id="telkku_main_div" style={divDialogStyle}>
+        <div id="telkku_main_div" style={divDialogStyle}
+        onKeyUp={this.altPlusKeyUpProgramHeader}>
           <div
-            class={style.cardHeader}
-            onKeyUp={this.altPlusKeyUpProgramHeader}
+            class={style.cardHeader}            
           >
-            <h1 tabIndex="0" lang="fi">
+            <h1 tabIndex="0" lang="fi" id="focus_1_element">
               Telkku {this.getFetchedDate()}
             </h1>
 
@@ -1498,7 +1512,7 @@ export default class Telkku extends Component {
                 <div class={style.cardHeader}>
                   <h3 lang="fi" tabIndex="0">
                     -- Ohjelmataulukko, liikutaan hiirellä tai taulukon sisällä
-                    seuraavilla näppäimillä: alt+s = seuraava kanava, alt+k =
+                    seuraavilla näppäimillä: alt+a = seuraava kanava, alt+k =
                     edellinen kanava sekä alt+o = liikutaan kanavan otsakkeeseen.
                     Myös ensimmäisen kerran/sama kanava on mahdollista
                     painaa alt+c:ää, jolloin ruudunlukuohjelma sanoo kanavan nimen, mutta 
@@ -1507,7 +1521,7 @@ export default class Telkku extends Component {
                     näppäimellä ja enterillä tai hiirenklikkauksella. 
                     Taulukon sisällä toimivat myös tab sekä shift-tab 
                     näppäimet. Taulukon yläpuolelle tekstin "Ohjelmataulukko" 
-                    kohdalle pääsee komennolla alt+t.
+                    kohdalle pääsee komennolla alt+a.
                   </h3>
                 </div>
                 {state.bSearchButtonClicked && state.textSearch != null

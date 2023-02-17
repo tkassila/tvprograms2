@@ -24,7 +24,6 @@ import dayjs from 'dayjs';
 
 // import Category from './Category';
 // import GridOrList from './GridOrList';
-import DayServices from './DayServices';
 //import jsonp from '../../utils/jsonp';
 
 // import StaticFunctions from '../../unpm install axios-jsonptils/StaticFunctions';

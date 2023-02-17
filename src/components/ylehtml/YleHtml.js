@@ -251,13 +251,15 @@ export default class YleHtml extends Component {
     //	this.fetchProgSchedules(this.state.progsource);
     this._mounted = true;
     // this.tablCntl.current.onkeydown = this.cntlPlusKeyUp;
-    if (document.getElementById("programtable"))
-      document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
+ //   if (document.getElementById("programtable"))
+   //   document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
     this.section_width = this.sectionRef.current.offsetWidth;
     if (Config.bDebug) {
       console.log("this.sectionRef.current.offsetWidth");
       console.log(this.section_width);
     }
+    let firstElem = document.getElementById("programtable");
+    if (firstElem) firstElem.focus();
   }
 
   getDerivedStateFromProps(props, state) {
@@ -447,26 +449,30 @@ export default class YleHtml extends Component {
       switch (e.key) { // 
         case "r":
           case "R":
+            e.preventDefault();
             path = document.activeElement;
-            if (path) {
+            if (path && path.innerHTML) {
               this.speakScreenReader(path.innerHTML.toString());
             }
             break;
 
         case "c":
         case "C":
+          e.preventDefault();
           path = e.composedPath();
           //... handle alt+o
           divInsideOfCol = this.getH3OfCurrentColumn(path);
           if (divInsideOfCol) {
             const channelTextHtml = divInsideOfCol.innerHTML;
             const channelText = channelTextHtml.toString();
-            this.speakScreenReader(channelText);
+            if (channelText)
+              this.speakScreenReader(channelText);
           }
           break;
 
         case "o":
         case "O":
+          e.preventDefault();
           path = e.composedPath();
           //... handle alt+o
           divInsideOfCol = this.getH3OfCurrentColumn(path);
@@ -478,6 +484,7 @@ export default class YleHtml extends Component {
         case "k":
         case "K":
           //... handle alt+k
+          e.preventDefault();
           path = e.composedPath();
           currentColInd = this.getCurrentColumnIndex(path);
           if (currentColInd > 0) {
@@ -488,9 +495,11 @@ export default class YleHtml extends Component {
           }
           break;
 
-        case "s":
-        case "S":
+        case "a":
+        case "A":
           //... handle alt+s
+          console.log("a");
+          e.preventDefault();
           path = e.composedPath();
           currentColInd = this.getCurrentColumnIndex(path);
           if (currentColInd !== -1 && currentColInd < lenCols - 1) {
@@ -527,6 +536,9 @@ export default class YleHtml extends Component {
 				}
 				*/
           break;
+          default:
+            return true; 
+            break;  
       }
     }
   };
@@ -1236,6 +1248,7 @@ export default class YleHtml extends Component {
 					  return <th style={'vertical-align: top; padding-left: 5px; padding-right: 5px;' +tableBorderStyle}>{child}</th>
 				  });
 				  */
+         
       if (tmp_channels != null)
         tabletds = tmp_channels.map((child, k) => {
           return (
@@ -2188,13 +2201,17 @@ export default class YleHtml extends Component {
 
       // .item(0).innerHTML
       switch (e.key) {
-        case "t":
+        case "m":
+        case "M":
           //... handle alt+t
           if (document.getElementById("idprogramtableh3")) {
             let divh3 = document.getElementById("idprogramtableh3");
             if (divh3) divh3.focus();
           }
           break;
+        default:
+          return this.altPlusKeyUp(e); 
+          break;  
       }
     }
   };
@@ -2255,6 +2272,28 @@ export default class YleHtml extends Component {
 					return s.name; 
 				  });
 				*/
+
+        const storestate = this.store.getState();
+        const browser = storestate.isbrowser;
+    
+        let themevalue = storestate.darkstyle;
+        if (Config.bDebug) console.log("YleHtml props.themevalue" + themevalue);
+        this.divDialogStyle =
+          themevalue !== undefined && themevalue !== ""
+            ? "color: #FFF; background-color: black; border-color: #FFF;"
+            : "";
+        this.sectionStyle =
+          themevalue !== undefined && themevalue !== ""
+            ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; " +
+              (this.section_width_css == undefined ? "" : this.section_width_css)
+            : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;" +
+              (this.section_width_css == undefined ? "" : this.section_width_css);
+    
+        this.tablesectionStyle =
+          themevalue !== undefined && themevalue !== ""
+            ? " border:1px solid pink; padding:15px;  margin:10px; background: black; color: white; "
+            : " border:1px solid black; padding:15px;  margin:10px; background: white; color: black;";
+    
       let tmp_channels = null;
       let channels = tableheaders_and_rows.channels;
       if (channels)
@@ -2348,12 +2387,14 @@ export default class YleHtml extends Component {
 								onChange={this.radioProgSourceChanged} ></Radio>
 		*/
 
+    console.log("before YleHtml render return");
+
     return (
       <Fragment>
-        <div id="idylehtml" style={this.divDialogStyle}>
+        <div id="idylehtml" style={this.divDialogStyle} 
+            onKeyUp={this.altPlusKeyUpProgramHeader}>
           <div
-            class={style.cardHeader}
-            onKeyUp={this.altPlusKeyUpProgramHeader}
+            class={style.cardHeader}            
           >
             <h1 tabIndex="0" lang="fi" title={"Yle " + this.getFetchedDate()}>
               Yle {this.getFetchedDate()}
@@ -2921,18 +2962,11 @@ export default class YleHtml extends Component {
                   <h3 id="idprogramtableh3" tabIndex="0">
                     Ohjelmataulukko
                   </h3>
-                </div>
-                {isFirefox ? (
-                  <div class=" mdc-typography--caption" lang="fi" tabIndex="0">
-                    Jos käytät firefox selainta (ja ruudunlukuohjelmaa),
-                    taulukon kanava alt -näppäinkomennot eivät toimi. Käytä
-                    jotain toista selainta. Kiitos.
-                  </div>
-                ) : (
+                </div>       
                   <div class=" mdc-typography--caption">
                     <h3 lang="fi" tabIndex="0">
                       -- Ohjelmataulukko, liikutaan hiirellä tai taulukon
-                      sisällä seuraavilla näppäimillä alt+s = seuraava kanava,
+                      sisällä seuraavilla näppäimillä alt+a = seuraava kanava,
                       alt+k = edellinen kanava sekä alt+o = liikutaan kanavan
                       otsakkeeseen. Myös ensimmäisen kerran/sama kanava on mahdollista
                       painaa alt+c:ää, jolloin ruudunlukuohjelma sanoo kanavan nimen, mutta 
@@ -2941,10 +2975,10 @@ export default class YleHtml extends Component {
                       näppäimellä ja enterillä tai hiirenklikkauksella. Taulukon
                       sisällä toimivat myös tab sekä shift-tab näppäimet.
                       Taulukon yläpuolelle tekstin "Ohjelmataulukko" kohdalle
-                      pääsee komennolla alt+t.
+                      pääsee komennolla alt+m.
                     </h3>
                   </div>
-                )}
+                
                 {!tabletds && (
                   <div
                     tabIndex="0"

@@ -1,5 +1,5 @@
 import { h, Component, Fragment, createRef } from "preact";
-import { useState } from "preact/hooks";
+// import { useState } from "preact/hooks";
 import _uniqueId from "lodash/uniqueId";
 import style from "./Dialog.css";
 import css from "./Dialog.css";

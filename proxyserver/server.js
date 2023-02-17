@@ -480,7 +480,7 @@ app.get("/yletv_opas/:date", (req, res) => {
 // ?t=2021-03-20
 app.get("/yleradio_opas/:date", (req, res) => {
   const cmd =
-    'curl "https://areena.yle.fi/audio/opas?t=' +
+    'curl "https://areena.yle.fi/podcastit/opas?t=' +
     req.params.date.substring(1) +
     '"';
   // res.send(cmd);

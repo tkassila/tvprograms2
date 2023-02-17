@@ -34,7 +34,6 @@ function AmppariShowProgram(props) {
       : "color: #FFF; background-color: black; border-color: #FFF;";
 
   const [displaydescription, setDisplayDescription] = useState(false);
-  //    const [displayAllDescriptions, setDisplayAllDescriptions] = useState(props.displayAllDescriptions);
   const scrollingDlgRef = useRef(null);
 
   // dot = " height: 25px; width: 25px; background-color: #bbb; border-radius: 50%; display: inline-block;";
@@ -49,8 +48,15 @@ function AmppariShowProgram(props) {
     if (!displaydescription)
       // scrollingDlgRef.current.MDComponent.show();
       scrollingDlgRef.current.open();
-    setDisplayDescription(!displaydescription);
+      changeDisplayDescriptionValue();
   };
+
+  const changeDisplayDescriptionValue = () => changeDisplayDes(!displaydescription);
+
+  const changeDisplayDes = (bValue) => {
+    setDisplayDescription(bValue);
+  }
+
 
   const onClickDisplayDialog = (event) => {
     event.preventDefault();
@@ -58,7 +64,7 @@ function AmppariShowProgram(props) {
     if (displaydescription)
       //scrollingDlgRef.current.MDComponent.close();
       scrollingDlgRef.current.close();
-    setDisplayDescription(!displaydescription);
+      changeDisplayDescriptionValue();
   };
 
   const getTime = (timemillisec) => {

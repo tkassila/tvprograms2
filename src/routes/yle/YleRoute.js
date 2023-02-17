@@ -15,7 +15,7 @@ export default class YleRoute extends Component {
   constructor(props) {
     super(props);
     if (Config.bDebug) {
-      console.log("TelkkuRoute.js");
+      console.log("YleRoute.js");
       console.log("props");
       console.log(props);
     }

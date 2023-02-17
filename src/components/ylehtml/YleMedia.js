@@ -102,6 +102,10 @@ export default class YleMedia extends Component {
     this.abortSignal = this.abortController.signal; // 2
     //	this.fetchProgSchedules(this.state.progsource);
     this._mounted = true;
+    /*
+    let aField = document.getElementById('focus_1_element'); 
+    if (aField) aField.focus();   
+    */
   }
 
   componentWillUnmount() {
@@ -557,7 +561,7 @@ export default class YleMedia extends Component {
     return (
       <div>
         <div class={style.cardHeader}>
-          <h1>Yle {this.getFetchedDate()}</h1>
+          <h1 id="focus_1_element">Yle {this.getFetchedDate()}</h1>
           <div>
             Hae ohjelmatiedot alimpaan taulukkoon yllä olevan päivän ajankohta
             linkin ja alla olevan päivämäärän mukaan:

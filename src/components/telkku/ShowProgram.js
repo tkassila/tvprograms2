@@ -41,8 +41,14 @@ function ShowProgram(props) {
     if (!displaydescription)
       //scrollingDlgRef.current.MDComponent.show();
       scrollingDlgRef.current.open();
-    setDisplayDescription(!displaydescription);
+      changeDisplayDescriptionValue();
   };
+
+  const changeDisplayDescriptionValue = () => changeDisplayDes(!displaydescription);
+
+  const changeDisplayDes = (bValue) => {
+    setDisplayDescription(bValue);
+  }
 
   const onClickDisplayDialog = (event) => {
     event.preventDefault();
@@ -50,7 +56,7 @@ function ShowProgram(props) {
     // if (displaydescription)
     //scrollingDlgRef.current.MDComponent.close();
     scrollingDlgRef.current.close();
-    setDisplayDescription(!displaydescription);
+    changeDisplayDescriptionValue();
   };
 
   /*

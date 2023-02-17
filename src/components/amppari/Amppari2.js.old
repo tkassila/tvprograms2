@@ -1,5 +1,4 @@
 import { h, Component, createRef, Fragment } from "preact";
-
 //import Card from 'preact-material-components/Card';
 //import 'preact-material-components/Card/style.css';
 //import 'preact-material-components/Button/style.css';
@@ -11,7 +10,7 @@ import Config from "../../utils/Config";
 //import Select from 'preact-material-components/Select';
 //import 'preact-material-components/List/style.css';
 //import 'preact-material-components/Menu/style.css';
-//import 'preact-material-components/Sele_ct/style.css';
+//import 'preact-material-components/Select/style.css';
 // import Checkbox from 'preact-material-components/Checkbox';
 //import Formfield from 'preact-material-components/FormField';
 //import Button from 'preact-material-components/Button';
@@ -20,12 +19,15 @@ import Config from "../../utils/Config";
 //import 'preact-material-components/TextField/style.css';
 //import 'preact-material-components/Theme/style.css';
 
+import { signal, computed, effect } from "@preact/signals-core";
+
 import Button from "../button/Button";
 
 import dayjs from "dayjs";
 import AmppariChannel from "./AmppariChannel";
 import ChannelTypes from "./ChannelTypes";
 import ProgramTypes from "./ProgramTypes";
+import SignalSelectedValue from "./SignalSelectedValue";
 import SearchPrograms from "./SearchPrograms";
 import SwitchCheckbox from "../checkbox/CheckBox";
 
@@ -50,18 +52,24 @@ const filtercalled = {
   MAKESEARCH: "makesearch",
 };
 
-//let season = seasons.SPakRING
+//let season = seasons.SPRING
 //if (!season) {
 //	throw new Error("Season is not defined")
 //}
 
-export default class Amppari extends Component {
+export default class Amppari2 extends Component {
   store = null;
   unsubscribelistener = null;
   fetch_url_telkku = null;
   fetch_url_ampparissa = null;
   arr_selecttyyppi_items = ["kaikki", "elokuvat", "urheilu"];
   arr_selectchanneltypes = ["kaikki", "ilmaiset", "maksulliset"];
+  changed = { ind: 0, selected: this.arr_selectchanneltypes[0] };
+  current_channeltype = signal(this.changed);
+  changed2 = { ind: 0, selected: this.arr_selecttyyppi_items[0] };
+  current_programtype = signal(this.changed2);
+  fetcheditems = signal([]);
+
   ilmaisetchannelnames = [
     "Yle TV1",
     "Yle TV2",
@@ -93,10 +101,11 @@ export default class Amppari extends Component {
   programTypeRef = null;
   tablCntl = null;
 
-  fetcheditems = [];
-  channeltypeitems = [];
-  programtypeitems = [];
-  channels = [];
+  // fetcheditems = [];
+  channeltypeitems = signal([]);
+  programtypeitems = signal([]);
+  channels = signal([]);
+
   textSearch = null;
   _mounted = false;
 
@@ -113,10 +122,49 @@ export default class Amppari extends Component {
   constructor(props) {
     super(props);
     if (Config.bDebug) {
-      console.log("Amppari.js");
+      console.log("Amppari2.js");
       console.log("props");
       console.log(props);
     }
+
+    effect(() => {
+      console.log("current_programtype is now", this.current_programtype.value);
+      if (
+        this.current_programtype.value != undefined &&
+        this.store != undefined
+      ) {
+        const value = this.current_programtype.value;
+        const items = this.filterAfterProgramType(value);
+        /*
+        this.setState({
+          selectedTyyppiinindex: ind,
+          selectedtyyppi: selected,
+          channels: items,
+        });
+        */
+        this.store.setState({
+          programtypeitems: items,
+          selectedtyyppi: value,
+        });
+      }
+    });
+
+    effect(() => {
+      console.log("current_channeltype is now", this.current_channeltype.value);
+      if (
+        this.current_channeltype.value != undefined &&
+        this.store != undefined
+      ) {
+        const filtereditems = this.filterChannesAfterChannelPay(
+          this.current_channeltype.value
+        );
+        if (filtereditems != undefined && filtereditems != null) {
+          this.channeltypeitems.value = filtereditems;
+          this.setState({ channeltypeitems: filtereditems });
+          this.store.setState({ channeltypeitems: filtereditems });
+        }
+      }
+    });
 
     this.store = props.store;
     let today = new Date(Date.now());
@@ -149,7 +197,7 @@ export default class Amppari extends Component {
       bSearchButtonClicked: false,
       bShowTableBorder: false,
       bshowdcurrentprograms: true,
-      themevalue: props.themevalue,     
+      themevalue: props.themevalue,
     };
 
     // https://telkussa.fi/sivu/1/20210215
@@ -217,20 +265,9 @@ export default class Amppari extends Component {
       this.setState({ fetcheditems: store_fetcheditems });
       this.store.setState({ fetcheditems: store_fetcheditems });
     }
-  //  document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
-    this.section_width = this.sectionRef.current.offsetWidth;  
-    let aField = document.getElementById('focus_1_element'); 
-    if (aField) 
-    {
-      this.sleep(500);
-      aField.focus();    
-    }
+    document.getElementById("programtable").onkeydown = this.altPlusKeyUp;
+    this.section_width = this.sectionRef.current.offsetWidth;
   }
-
-  sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-  }
-  
 
   removelisteners = () => {
     if (this.unsubscribelistener != null) {
@@ -266,11 +303,11 @@ export default class Amppari extends Component {
 
   listenerStoreChange2 = (storestate) => {
     if (Config.bDebug) {
-      console.log("Amppari listenerStoreChange2");
+      console.log("Amppari2 listenerStoreChange2");
       console.log(storestate);
     }
     if (storestate === undefined || storestate === null) {
-      console.log("Amppari listenerStoreChange storestate");
+      console.log("Amppari2 listenerStoreChange storestate");
       return;
     }
 
@@ -279,7 +316,7 @@ export default class Amppari extends Component {
     const bDisplayAllDescriptions = storestate.bDisplayAllDescriptions;
     const textSearch = storestate.textSearch;
     const selectedTyyppiinindex = storestate.selectedTyyppiinindex;
-    this.channels = channels;
+    this.channels.value = channels;
     this.textSearch = textSearch;
     let store_selectedtyyppi = storestate.selectedtyyppi;
     if (
@@ -632,8 +669,8 @@ export default class Amppari extends Component {
       console.log(channelurl);
     }
 
-    this.fetcheditems = [];
-    this.channeltypeitems = [];
+    this.fetcheditems.value = [];
+    this.channeltypeitems.value = [];
     this.store.setState({ fetchitems: [] });
 
     this.setState({
@@ -718,12 +755,12 @@ export default class Amppari extends Component {
               console.log("-- 1");
               // console.log(data2);
             }
-            this.fetcheditems = data2;
-            this.channeltypeitems = data2;
+            this.fetcheditems.value = data2;
+            this.channeltypeitems.value = data2;
             // this.programtypeitems = data2;
             // this.channels = data2;
             this.setState({
-              fetcheditems: this.fetcheditems,
+              fetcheditems: this.fetcheditems.value,
               channels: [],
               bUnderFetch: false,
               selectedsuodattimet: "kaikki",
@@ -735,6 +772,7 @@ export default class Amppari extends Component {
               bSearchButtonClicked: false,
               selectedchannelindex: 0,
             });
+            this.fetcheditems.value = data2;
             this.store.setState({ fetchitems: data2 });
             // this.filterWhenUIControlsHasBeenChanged(filtercalled.CHANNELTYPE);
             // this.channels = data2;
@@ -748,7 +786,8 @@ export default class Amppari extends Component {
 						//this.filterWhenUIControlsHasBeenChanged(filtercalled.CHANNELTYPE);
 						*/
             this.setState({
-              /* fetcheditems: this.fetcheditems, */ channels: this.channels,
+              /* fetcheditems: this.fetcheditems, */ channels:
+                this.channels.value,
               bUnderFetch: false,
               selectedsuodattimet: "kaikki",
               selectedtyyppi: "kaikki",
@@ -1479,7 +1518,7 @@ export default class Amppari extends Component {
     } else {
       const st = this.store;
       const storestate = st.getState();
-      this.channels = storestate.channels;
+      this.channels.value = storestate.channels;
       -1;
       this.setState({
         showChannelsAtSameTime: this.const_showChannelsAtSameTime,
@@ -1701,7 +1740,7 @@ export default class Amppari extends Component {
 
     const currenttime = new Date();
 
-    let all_channels = this.channels;
+    let all_channels = this.channels.value;
     if (all_channels == null) {
       headers = [];
       channels = [];
@@ -2230,13 +2269,13 @@ export default class Amppari extends Component {
     this.setState({
       bSearchButtonClicked: true,
       bDisplayAllDescriptions: true,
-      channels: this.channels,
+      channels: this.channels.value,
     });
     this.forceUpdate();
   };
 
   getMovieOrSportChannels = (selected) => {
-    const fitems = this.channeltypeitems;
+    const fitems = this.channeltypeitems.value;
     if (fitems == null) return null;
     if (selected == undefined || selected == null) return null;
     let ret = null;
@@ -2264,6 +2303,7 @@ export default class Amppari extends Component {
       let prcopy = null;
       Array.from(chcoopy.channelprograms).forEach((pr) => {
         // cha.channelprograms.forEach(pr, i => {
+        if (pr === undefined) return;
         if (foundmovies && pr.movie) {
           progfounded = true;
           foundedPrograms.push(pr);
@@ -2327,8 +2367,7 @@ export default class Amppari extends Component {
     let chtype = null;
 
     // const fitems = this.state.fetcheditems;
-    const fitems = this.fetcheditems;
-
+    const fitems = this.state.fetcheditems;
     if (Config.bDebug) {
       console.log("filterChannesAfterChannelPay");
       console.log("channeltype");
@@ -2402,7 +2441,8 @@ export default class Amppari extends Component {
       console.log(chls.length);
     }
 
-    this.channeltypeitems = chls;
+    this.channeltypeitems.value = chls;
+    this.setState({ channeltypeitems: chls });
 
     // let chls = this.filterFetchedItemsIntoChannelsAfterSuodin(chtype);
     /*
@@ -2441,10 +2481,10 @@ export default class Amppari extends Component {
     }
 
     // const fitems = this.state.channeltypeitems;
-    const fitems = this.channeltypeitems;
+    const fitems = this.channeltypeitems.value;
     if (Config.bDebug) {
       console.log("filterAfterProgramType channeltypeitems");
-      console.log(this.channeltypeitems);
+      console.log(this.channeltypeitems.value);
       console.log("channeltypeitems.length");
       console.log(fitems.length);
     }
@@ -2457,13 +2497,13 @@ export default class Amppari extends Component {
       items = this.getMovieOrSportChannels(mychange);
     }
 
-    this.programtypeitems = items;
-    this.channels = items;
+    this.programtypeitems.value = items;
+    this.channels.value = items;
     if (Config.bDebug) {
       console.log("programtypeitems");
-      console.log(this.programtypeitems);
+      console.log(this.programtypeitems.value);
       console.log("programtypeitems.length");
-      console.log(this.programtypeitems.length);
+      console.log(this.programtypeitems.value.length);
     }
     /*		
 		if (change !== undefined)
@@ -2489,7 +2529,7 @@ export default class Amppari extends Component {
       change.toString().trim().length == 0
     ) {
       this.textSearch = null;
-      this.channels = this.programtypeitems;
+      this.channels.value = this.programtypeitems.value;
       this.setState({ textSearch: null, bSearchButtonClicked: false });
       // this.filterAfterSearch();
       /*
@@ -2521,9 +2561,9 @@ export default class Amppari extends Component {
       console.log(mychange);
     }
 
-    this.channels = this.state.programtypeitems;
+    this.channels.value = this.state.programtypeitems.value;
     if (mychange !== undefined || mychange !== null || mychange) {
-      let all_channels = this.channels;
+      let all_channels = this.channels.value;
       //let all_channels = this.channels;
       if (Config.bDebug) {
         console.log("all_channels");
@@ -2618,8 +2658,8 @@ export default class Amppari extends Component {
 
             let prcopy = null;
             Array.from(chcoopy.channelprograms).forEach((pr) => {
-              if (pr === undefined) return;
               // cha.channelprograms.forEach(pr, i => {
+              if (pr === undefined) return;
               progfounded = false;
               prcopy = {};
               Object.assign(prcopy, pr);
@@ -2685,19 +2725,19 @@ export default class Amppari extends Component {
             // if (change == undefined)
             // this.setState({ bSearchButtonClicked: false,
             //	channels: null});
-            this.channels = null;
+            this.channels.value = null;
           } else {
             if (Config.bDebug) {
               console.log("foundedChannels");
-              console.log(this.programtypeitems);
+              console.log(this.programtypeitems.value);
               console.log("foundedChannels.length");
-              console.log(foundedChannels.length);
+              console.log(foundedChannels.value.length);
             }
             /*
 						this.setState({ bSearchButtonClicked: true, 
 							channels: foundedChannels});
 							*/
-            this.channels = foundedChannels;
+            this.channels.value = foundedChannels;
           }
         }
       }
@@ -2835,13 +2875,6 @@ export default class Amppari extends Component {
     return ret;
   };
 
-  speakScreenReader(text)
-  {
-    document.getElementById("screenreaderdiv").innerHTML = text;
-    this.setState({screenreaderdiv: text })
-  }
-
-
   altPlusKeyUp = (e) => {
     e = e || window.event;
     let keyCode = e.keyCode || e.which,
@@ -2886,33 +2919,9 @@ export default class Amppari extends Component {
       let path = null;
 
       // .item(0).innerHTML
-      switch (e.key) {        
-        case "r":
-        case "R":
-          e.preventDefault();
-          path = document.activeElement;
-          if (path && path.innerHTML) {
-            this.speakScreenReader(path.innerHTML.toString());
-          }
-          break;
-
-        case "c":
-        case "C":
-          e.preventDefault();
-          path = e.composedPath();
-          //... handle alt+o
-          divInsideOfCol = this.getH3OfCurrentColumn(path);
-          if (divInsideOfCol) {
-            const channelTextHtml = divInsideOfCol.innerHTML;
-            const channelText = channelTextHtml.toString();
-            if (channelText)
-              this.speakScreenReader(channelText);
-          }
-          break;
-
+      switch (e.key) {
         case "o":
         case "O":
-          e.preventDefault();
           //... handle alt+o
           path = e.composedPath();
           let divInsideOfCol = this.getH3OfCurrentColumn(path);
@@ -2923,7 +2932,6 @@ export default class Amppari extends Component {
 
         case "k":
         case "K":
-          e.preventDefault();
           //... handle alt+k
           path = e.composedPath();
           currentColInd = this.getCurrentColumnIndex(path);
@@ -2937,7 +2945,6 @@ export default class Amppari extends Component {
 
         case "a":
         case "A":
-          e.preventDefault();
           //... handle alt+s
           path = e.composedPath();
           currentColInd = this.getCurrentColumnIndex(path);
@@ -3013,25 +3020,122 @@ export default class Amppari extends Component {
         console.log("e");
         console.log(e);
       }
-      // .item(0).innaerHTML
+      // .item(0).innerHTML
       switch (e.key) {
         case "m":
-        case "M":  
+        case "M":
           //... handle alt+t
           if (document.getElementById("idprogramtableh3")) {
             let divh3 = document.getElementById("idprogramtableh3");
             if (divh3) divh3.focus();
           }
           break;
-          default:
-            return this.altPlusKeyUp(e); 
-            break;  
+           default:
+          return this.altPlusKeyUp(e); 
+          break;  
       }
     }
   };
 
   getSectionWidthCss = () => {
     return "width: " + this.section_width + "px;";
+  };
+
+  filterChannesAfterChannelPay = (channeltype) => {
+    //  filterChannesAfterChannelPay takes items from fetcheditems and populates: channeltypeitems,
+    let ind = null;
+    let selected = null;
+    let chtype = null;
+
+    // const fitems = this.state.fetcheditems;
+    const fitems = this.fetcheditems.value;
+
+    if (Config.bDebug) {
+      console.log("filterChannesAfterChannelPay");
+      console.log("channeltype");
+      console.log(channeltype);
+      console.log("fitems");
+      console.log(fitems);
+      console.log("fitems.size");
+      console.log(fitems.length);
+    }
+    if (channeltype !== undefined) {
+      ind = channeltype.ind;
+      selected = channeltype.selected;
+      chtype = channeltype.channeltype;
+    } else {
+      selected = this.state.selectedsuodattimet;
+      ind = this.state.selectedsuodatinindex;
+    }
+
+    if (Config.bDebug) {
+      console.log("filterChannesAfterChannelPay 2");
+      console.log("ind");
+      console.log(ind);
+      console.log("selected");
+      console.log(selected);
+    }
+
+    let chls = null;
+    if (fitems == null) chls = null;
+    else if (selected == undefined || selected == null) chls = fitems;
+    else {
+      if (selected == "kaikki") chls = fitems;
+      else {
+        let ret = null;
+        if (selected === "ilmaiset") {
+          ret = fitems.filter((s, i) => {
+            //	console.log("i");
+            //	console.log(i);
+            return s.pay === false;
+          });
+        } else if (selected === "maksulliset") {
+          ret = fitems.filter((s, i) => {
+            //	console.log("i");
+            //	console.log(i);
+            return s.pay === true;
+          });
+        }
+        chls = ret;
+      }
+    }
+
+    if (Config.bDebug) {
+      console.log("chls 2");
+      console.log(chls);
+    }
+
+    if (Config.bDebug) {
+      console.log("chls - channeltypeitems");
+      console.log(chls);
+      console.log("channeltypeitems.size");
+      console.log(chls.length);
+    }
+
+    this.channeltypeitems.value = chls;
+
+    // let chls = this.filterFetchedItemsIntoChannelsAfterSuodin(chtype);
+    /*
+		if (!bChange)
+		this.setState({
+			selectedsuodatinindex: ind,	
+			selectedsuodattimet: selected,
+			channeltypeitems: chls
+		});
+		else
+		this.setState({
+			selectedsuodatinindex: ind,	
+			selectedsuodattimet: selected,
+			channeltypeitems: chls,
+			bCheckShowChannelsAtSameTime: true
+		});
+		*/
+
+    if (Config.bDebug) {
+      console.log("filterChannesAfterChannelPay 3");
+      console.log(this.state);
+    }
+    return chls;
   };
 
   render(props, state) {
@@ -3155,12 +3259,7 @@ export default class Amppari extends Component {
 
     if (channels != null) {
       if (tableheaders != null) console.log(tableheaders.length);
-      if (Config.bDebug) {
-        console.log("tabletds.length");
-        if (tabletds == null || tabletds == undefined)
-          console.log("tabletds == null || tabletds == undefined");
-        else console.log(tabletds.length);
-      }
+      if (tabletds != null) console.log(tabletds.length);
     }
     /*
 		if (state.channels != null)
@@ -3188,13 +3287,12 @@ export default class Amppari extends Component {
           style={
             " min-height: 100%; margin: 0px; height: 100%: " + divDialogStyle
           }
-          onKeyUp={this.altPlusKeyUpProgramHeader}
         >
           <div
             class={style.cardHeader + divDialogStyle}
-            
+            onKeyUp={this.altPlusKeyUpProgramHeader}
           >
-            <h1 tabIndex="0" lang="fi" id="focus_1_element">
+            <h1 tabIndex="0" lang="fi">
               Amppari {this.getFetchedDate()}
             </h1>
             <section
@@ -3470,6 +3568,24 @@ export default class Amppari extends Component {
                   ref={this.channelTypeRef}
                   setRemoverFunction={this.setRemoverFunction}
                 />
+
+                <SignalSelectedValue
+                  disabled={
+                    state.fetcheditems == null || state.fetcheditems.length == 0
+                  }
+                  labeltext="Ohjelmatyyppi"
+                  signalValueChange={this.current_programtype}
+                  selectitems={this.arr_selecttyyppi_items}
+                />
+
+                <SignalSelectedValue
+                  disabled={
+                    state.fetcheditems == null || state.fetcheditems.length == 0
+                  }
+                  labeltext="Kanavatyyppi"
+                  signalValueChange={this.current_channeltype}
+                  selectitems={this.arr_selectchanneltypes}
+                />
               </div>
             </section>
             <section
@@ -3491,14 +3607,15 @@ export default class Amppari extends Component {
                     <h3 lang="fi" tabIndex="0">
                       -- Ohjelmataulukko, liikutaan hiirellä tai taulukon
                       sisällä seuraavilla näppäimillä: alt+a = seuraava kanava,
-                      alt+k = edellinen kanava sekä alt+o = liikutaan kanavan otsakkeeseen. 
-                      Myös ensimmäisen kerran/sama kanava on mahdollista painaa al+c:ää, 
-                      jolloin ruudunlukuohjelma sanoo kanavan nimen, mutta selauskohta 
-                      ei muutu. Samoin atl+r:lla toistetaan kerran/ohjelmatieto sen teksti.
-                      Ohjelman kuvailun saa näkymään tab näppäimellä ja enterillä 
-                      tai hiirenklikkauksella. Taulukon sisällä toimivat myös tab 
-                      sekä shift-tab näppäimet. Taulukon yläpuolelle tekstin 
-                      "Ohjelmataulukko" kohdalle pääsee komennolla alt+m.
+                      alt+k = edellinen kanava sekä alt+o = liikutaan kanavan                       
+                      otsakkeeseen. Myös ensimmäisen kerran/sama kanava on mahdollista
+                      painaa alt+c:ää, jolloin ruudunlukuohjelma sanoo kanavan nimen,
+                      mutta selauskohta ei muutu. Samoin atl+r:lla toistetaan 
+                      kerran/ohjelmatieto sen teksti.  Ohjelman kuvailun saa näkymään tab
+                      näppäimellä ja enterillä tai hiirenklikkauksella. Taulukon
+                      sisällä toimivat myös tab sekä shift-tab näppäimet.
+                      Taulukon yläpuolelle tekstin "Ohjelmataulukko" kohdalle
+                      pääsee komennolla alt+m.
                     </h3>
                   </div>
                   {state.bSearchButtonClicked && state.textSearch != null
@@ -3539,9 +3656,6 @@ export default class Amppari extends Component {
               </table>
             </section>
           </div>
-          <div id="screenreaderdiv" tabindex="0" aria-live="priority || polite"
-               class="visually-hidden" aria-label={this.state.screenreaderdiv} />
-       
         </div>
       </Fragment>
     );

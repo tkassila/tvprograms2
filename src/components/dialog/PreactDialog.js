@@ -18,7 +18,7 @@ import "preact-material-components/Dialog/style.css";
  * @micro/button class, because preact material button class dies
  * not work with DialogFooter.Button alias preact Button!
  */
-class MyDialog extends Component {
+class PreactDialog extends Component {
   dialogRef = null;
   closeButtonRef = null;
   channelHeader = null;
@@ -181,4 +181,4 @@ class MyDialog extends Component {
 
 // {props.children ? props.children : null}
 
-export default MyDialog;
+export default PreactDialog;

@@ -1,5 +1,5 @@
 import {h, Fragment, Component, createRef, render } from 'preact';
-import { useRef } from 'preact/hooks';
+// import { useRef } from 'preact/hooks';
 // import { forwardRef } from 'preact/compat';
 import Config from '../../utils/Config';
 import './index.css';

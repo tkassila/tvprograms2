@@ -49,8 +49,14 @@ export default function YleProgram(props) {
     //        if (!displaydescription)
     //            scrollingDlgRef.current.MDComponent.show();
     if (!displaydescription) scrollingDlgRef.current.open();
-    setDisplayDescription(!displaydescription);
+    changeDisplayDescriptionValue();
   };
+
+  const changeDisplayDes = (bValue) => {
+    setDisplayDescription(bValue);
+  }
+
+  const changeDisplayDescriptionValue = () => changeDisplayDes(!displaydescription);
 
   const onClickDisplayDialog = (event) => {
     event.preventDefault();
@@ -58,7 +64,7 @@ export default function YleProgram(props) {
     // if (displaydescription)
     // scrollingDlgRef.current.MDComponent.close();
     scrollingDlgRef.current.close();
-    setDisplayDescription(!displaydescription);
+    changeDisplayDescriptionValue();
   };
 
   const getTime = (timemillisec) => {

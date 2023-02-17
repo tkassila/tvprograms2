@@ -3022,7 +3022,8 @@ export default class Amppari2 extends Component {
       }
       // .item(0).innerHTML
       switch (e.key) {
-        case "t":
+        case "l":
+        case "L":
           //... handle alt+t
           if (document.getElementById("idprogramtableh3")) {
             let divh3 = document.getElementById("idprogramtableh3");

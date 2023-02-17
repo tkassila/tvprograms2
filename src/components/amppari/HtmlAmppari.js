@@ -172,13 +172,15 @@ export default class HtmlAmppari extends Component {
 			return <option value={child} id={i} >{child}</option>
 			});
 
+			console.log("before HtmlAmppari render return");
+
 		return (			
 			<div id="htmlamppari_main_div" style={divDialogStyle}>
 			<div class={style.cardHeader}>
 			<br></br>
 				<br></br>
 
-				<h1 tabIndex="0" lang="fi" >Amppari.fi</h1>
+				<h1 tabIndex="0" lang="fi" id="focus_1_element">Amppari.fi</h1>
 				<br></br>
 				<div class={style.cardHeader} tabIndex="0" lang="fi">
 						Valitse seuraavista:
