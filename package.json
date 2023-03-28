@@ -34,9 +34,9 @@
         "dayjs": "^1.11.7",
         "fetch-jsonp": "^1.2.3",
         "lodash.uniqueid": "^4.0.1",
-        "preact": "^10.12.1",
+        "preact": "^10.13.2",
         "preact-material-components": "^1.6.1",
-        "preact-render-to-string": "^5.2.6",
+        "preact-render-to-string": "^6.0.1",
         "preact-router": "^4.1.0"
     },
     "jest": {

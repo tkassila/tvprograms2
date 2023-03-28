@@ -19,11 +19,11 @@ import Media from "../utils/Media";
 //import 'preact-material-components/Typography/style.css';
 
 // import YleHtml from '../components/ylehtml/YleHtml';
-import YleRoute from "../routes/yle/YleRoute";
-import TelkkuRoute from "../routes/telkku/TelkkuRoute";
-import AmppariRoute from "../routes/amppari/AmppariRoute";
-import HtmlTelkkuRoute from "../routes/telkkuhtml/HtmlTelkkuRoute";
-import HtmlAmppariRoute from "../routes/ampparihtml/HtmlAmppariRoute";
+import YleRoute from "async!../routes/yle/YleRoute";
+import TelkkuRoute from "async!../routes/telkku/TelkkuRoute";
+import AmppariRoute from "async!../routes/amppari/AmppariRoute";
+import HtmlTelkkuRoute from "async!../routes/telkkuhtml/HtmlTelkkuRoute";
+import HtmlAmppariRoute from "async!../routes/ampparihtml/HtmlAmppariRoute";
 // import { useMediaQuery } from 'react-responsive';
 //import '../style'
 import './AppBackgroundWhite.css'
