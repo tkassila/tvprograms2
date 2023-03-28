@@ -1,5 +1,5 @@
 rm -R proxyserver/public/*
-preact build --sw  --no-prerender $*
-# npm run build --no-prerender $*
+preact build  --no-prerender $*
+#npm run build --no-prerender $*
 cp -R build/* proxyserver/public/
-zip proxyserver.zip proxyserver/
+zip -r proxyserver.zip proxyserver/*
