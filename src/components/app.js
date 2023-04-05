@@ -26,7 +26,7 @@ import HtmlTelkkuRoute from "async!../routes/telkkuhtml/HtmlTelkkuRoute";
 import HtmlAmppariRoute from "async!../routes/ampparihtml/HtmlAmppariRoute";
 // import { useMediaQuery } from 'react-responsive';
 //import '../style'
-import './AppBackgroundWhite.css'
+// import './AppBackgroundWhite.css'
 
 // import makeMatcher from "wouter-preact/matcher";
 // const defaultMatcher = makeMatcher();
@@ -66,7 +66,7 @@ export default class App extends Component {
     super(props);
     innerHeight = window.innerHeight;
     innerWidth = window.innerWidth; // document.querySelector("#height");
-
+    
     this.state = {
       themeChange: false,
       innerHeight: innerHeight,
@@ -263,7 +263,7 @@ export default class App extends Component {
     //		return true;
 
     // document.body.style = 'max-height: 100%; background-color: red; height: 100vh';
-
+    this.clearSelection();
     const bValue = !this.state.themeChange;
     let themeValue = this.state.themevalue;
     if (bValue) {
@@ -280,7 +280,6 @@ export default class App extends Component {
       }
     );
     this.store.setState({ darkstyle: themeValue });
-
 
   };
 
@@ -438,9 +437,32 @@ export default class App extends Component {
 						ref={this.ctrlHtmlAmppariRef}/>
 	*/
 
+  clearSelection = () => {
+    var sel;
+    if ( (sel = document.selection) && sel.empty ) {
+        sel.empty();
+    } else {
+        if (window.getSelection) {
+            window.getSelection().removeAllRanges();
+        }
+        var activeEl = document.activeElement;
+        if (activeEl) {
+            var tagName = activeEl.nodeName.toLowerCase();
+            if ( tagName == "textarea" ||
+                    (tagName == "input" && activeEl.type == "text") ) {
+                // Collapse the selection to the end
+                activeEl.selectionStart = activeEl.selectionEnd;
+            }
+        }
+    }
+  }
+
   themeChange = (themevalue) => {
     if (themevalue != undefined) {
       this.setState({ themevalue: themevalue });
+
+
+      this.clearSelection();
 
       if (Config.bDebug) {
         console.log("themevalue");
@@ -449,13 +471,13 @@ export default class App extends Component {
       if (themevalue.trim() == "") {
         //		import('./App.css');
         // documen.body.style.display = "background-color: white; color: black";
-        //	import('./AppBackgroundWhite.css');
+      	import('./AppBackgroundWhite.css');
         //				import('../style');
         // ument.html.style.display = "background-color: white;";
       } else {
         //				import('./App.css');
         // document.body.style.display = "background-color: black<; ; color: white";
-        //	import('./AppBackgroundBlack.css');
+      	import('./AppBackgroundBlack.css');
         //	document.body.style.display = "background-color: green; min-height: 100%;";
         // document.html.style.display = "background-color: black;";
       }
@@ -514,6 +536,20 @@ export default class App extends Component {
         : "color: black; background-color: white; border-color: #FFF;";
 
     // 			<Typography body1>
+
+    if (darkstyle.trim() == "") {
+      //		import('./App.css');
+      // documen.body.style.display = "background-color: white; color: black";
+      import('./AppBackgroundWhite.css');
+      //				import('../style');
+      // ument.html.style.display = "background-color: white;";
+    } else {
+      //				import('./App.css');
+      // document.body.style.display = "background-color: black<; ; color: white";
+      import('./AppBackgroundBlack.css');
+      //	document.body.style.display = "background-color: green; min-height: 100%;";
+      // document.html.style.display = "background-color: black;";
+    }
 
     /*
 		let cntrlRoute = null;

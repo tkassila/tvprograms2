@@ -340,3 +340,13 @@ a
    border-color: #FFF;
 }
 
+::-moz-selection { /* Code for Firefox */
+	color: white;
+	background: black;
+  }
+  
+  ::selection {
+	color: white;
+	background: black;
+  }
+

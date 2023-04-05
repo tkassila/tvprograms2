@@ -332,3 +332,14 @@ input[type='checkbox']:unchecked{
   input[type='checkbox']:focus {
 	outline: 4px solid black;  
   }
+
+
+  ::-moz-selection { 
+	color: black;
+	background: white;
+  }
+  
+  ::selection {
+	color: black;
+	background: white;
+  }

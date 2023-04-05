@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{Pu74:function(e,t,s){"use strict";s.r(t),s.d(t,"default",(function(){return d}));var a=s("hosL"),n="home__eC5AM",c="cardHeader__HeV+q",o="cardBody__MlCXS";class d extends a.Component{render(){return Object(a.h)("div",{class:`${n} page`},Object(a.h)("div",{class:c},Object(a.h)("h2",{tabIndex:"0",class:" mdc-typography--title"},"404! Page not found.")),Object(a.h)("div",{tabIndex:"0",class:o},"Looks like the page you are trying to access, doesn't exist."))}}}}]);
+//# sourceMappingURL=route-404.chunk.f5429.esm.js.map
