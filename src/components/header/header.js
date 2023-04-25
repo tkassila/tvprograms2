@@ -52,7 +52,7 @@ function Header(props){
           aria-label="Ohjelmalähteet ja ulkoasu (musta tai valkoinen)"
         >
           <nav>
-            <h1>Tv-ohjelmat</h1>
+            <h1>Tv- ja radio-ohjelmat</h1>
             <space> </space>
             <a tablndex="0"
               id="radio_yle"
