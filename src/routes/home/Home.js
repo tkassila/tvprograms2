@@ -34,7 +34,7 @@ export default class Home extends Component {
 			fetchcategory_offset: 0,
 			fetchcategory_limit: 0,
 			fetchcategory_count: 0,
-			progtitle: 'Tv-ohjelmat',
+			progtitle: 'Tv- ja radio-ohjelmat',
 			progsource: 'radio_yle',
 			progtable: 'rday',
 			currentDate: Date.now(),
@@ -79,7 +79,7 @@ export default class Home extends Component {
 		let ret = null;
 		switch(this.state.progsource)
 		{
-			case 'radio_yle': ret = 'Yle';
+			case 'radio_yle': ret = 'Yle tv- ja radio-ohjelmat';
 				break;
 			case 'radio_telkku': ret = 'Telkku tv ohjelmat';
 				break;
