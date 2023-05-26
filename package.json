@@ -34,10 +34,10 @@
         "dayjs": "^1.11.7",
         "fetch-jsonp": "^1.2.3",
         "lodash.uniqueid": "^4.0.1",
-        "preact": "^10.14.1",
+        "preact": "^10.15.0",
         "preact-material-components": "^1.6.1",
         "preact-render-to-string": "^5.2.6",
-        "preact-router": "^4.1.0"
+        "preact-router": "^4.1.1"
     },
     "jest": {
         "preset": "jest-preset-preact",
