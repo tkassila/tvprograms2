@@ -118,7 +118,7 @@ export default class YleHtml extends Component {
       sectionwidth: 0,
       errmsg: null,
       chosenIndex: 0,
-      progsource: "rtv",
+      progsource: "rradio", // "rtv",
       progtable: "rday",
       programs: null,
       currentDate: Date.now(),
@@ -2454,21 +2454,7 @@ export default class YleHtml extends Component {
 
     console.log("before YleHtml render return");
 
-    return (
-      <Fragment>
-        <div id="idylehtml" style={this.divDialogStyle} 
-            onKeyDown={this.altPlusKeyUpProgramHeader}>
-          <div
-            class={style.cardHeader}            
-          >
-            <h1 tabIndex="0" lang="fi" title={"Yle " + this.getFetchedDate()}>
-              Yle {this.getFetchedDate()}
-            </h1>
-            `
-            <div role="radiogroup" aria-labelledby="idyleprogramdatasource">
-              <label id="idyleprogramdatasource" lang="fi">
-                Tv tai radio-ohjelmat
-              </label>
+    /*
 
               <input
                 type="radio"
@@ -2484,6 +2470,23 @@ export default class YleHtml extends Component {
               />
               <label for="rtv" style={inputw}>
                 TV
+              </label>
+*/
+
+    return (
+      <Fragment>
+        <div id="idylehtml" style={this.divDialogStyle} 
+            onKeyDown={this.altPlusKeyUpProgramHeader}>
+          <div
+            class={style.cardHeader}            
+          >
+            <h1 tabIndex="0" lang="fi" title={"Yle " + this.getFetchedDate()}>
+              Yle {this.getFetchedDate()}
+            </h1>
+            `
+            <div role="radiogroup" aria-labelledby="idyleprogramdatasource">
+              <label id="idyleprogramdatasource" lang="fi">
+                Tv tai radio-ohjelmat
               </label>
 
               <input

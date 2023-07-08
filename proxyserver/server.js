@@ -494,6 +494,13 @@ app.get("/telkku/:channel", (req, res) => {
   execShellCommandXmlData(cmd, res);
 });
 
+app.get("/radioplayer/", (req, res) => {
+  const cmd =
+    'curl "https://www.radioplayer.fi/kanavat"';
+  // res.send(cmd);
+  execShellCommandXmlData(cmd, res);
+});
+
 app.get("/ampparissa/:rest", (req, res) => {
   console.log("ampparissa");
   console.log("query");

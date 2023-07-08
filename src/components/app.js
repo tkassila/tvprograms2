@@ -24,6 +24,8 @@ import TelkkuRoute from "async!../routes/telkku/TelkkuRoute";
 import AmppariRoute from "async!../routes/amppari/AmppariRoute";
 import HtmlTelkkuRoute from "async!../routes/telkkuhtml/HtmlTelkkuRoute";
 import HtmlAmppariRoute from "async!../routes/ampparihtml/HtmlAmppariRoute";
+import HtmlRadioPlayerRoute from '../routes/radioplayer/HtmlRadioPlayerRoute';
+
 // import { useMediaQuery } from 'react-responsive';
 //import '../style'
 // import './AppBackgroundWhite.css'
@@ -52,6 +54,7 @@ export default class App extends Component {
   ctrlYleRef = null;
   ctrlTelkkuRef = null;
   ctrlHtmlTelkkuRef = null;
+  ctrlHtmRadioPlayerRef = null;
   ctrlAmppariRef = null;
   ctrlHtmlAmppariRef = null;
   headerRef = null;
@@ -131,6 +134,7 @@ export default class App extends Component {
     this.ctrlTelkkuRef = createRef();
     // console.log("after ctrlTelkkuRef");
     this.ctrlHtmlTelkkuRef = createRef();
+    this.ctrlHtmRadioPlayerRef = createRef();
     // console.log("after ctrlHtmlTelkkuRef");
     this.ctrlAmppariRef = createRef();
     // console.log("after ctrlAmppariRef");
@@ -415,10 +419,13 @@ export default class App extends Component {
       case "/htmlamppari":
         this.currentProgsourceCntrl = this.ctrlHtmlAmppariRef;
         break;
+      case "/radioplayer":
+        this.currentProgsourceCntrl = this.ctrlHtmRadioPlayerRef;
+        break;
       default:
         this.currentProgsourceCntrl = this.ctrlYleRef;
         break;
-    }
+      }
 
     this.setState({ currentUrl: e.url, currentProgsourceCntrl: this.currentProgsourceCntrl });
 
@@ -635,6 +642,13 @@ export default class App extends Component {
                 themevalue={state.themevalue}
                 innerWidth_change={state.innerWidth_change}
               />
+
+              <HtmlRadioPlayerRoute
+                path="/radioplayer"
+                store={this.store}
+                ref={this.ctrlHtmlRadioPlayerRef}
+                themevalue={state.themevalue}
+              />  
           
           </Router>
         </div>

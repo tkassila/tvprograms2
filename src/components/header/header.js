@@ -31,9 +31,14 @@ import Config from "../../utils/Config";
 
 import style from "./style";
 
+function openHtmlRadioPlayer () {
+  let blankurl = 'https://www.radioplayer.fi';
+  // window.open(blankurl, '_blank', "Telkurpurlrpurlssa", "location=no");
+   window.open(blankurl, "_blank", "RadioPlayer");
+}
+
 function Header(props){
-
-
+  
 /*
   if (props.darkThemeEnabled) {
     import("../AppBackgroundBlack.css");
@@ -61,6 +66,15 @@ function Header(props){
             >
               Yle
             </a>   
+            <a 
+              tablndex="0"
+              id="radio_player"
+              className={curr_route === "/radioplayer" ? style.active : null}
+              href="/radioplayer"
+        
+            >
+              Radio Player
+            </a>
             <a 
               tablndex="0"
               id="radio_telkku"

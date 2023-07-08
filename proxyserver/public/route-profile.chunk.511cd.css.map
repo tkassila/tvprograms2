@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://./routes/profile/style.css"],"names":[],"mappings":"AAAA,gBAEC,eAAgB,CADhB,YAAa,CAEb,UACD","file":"route-profile.chunk.511cd.css","sourcesContent":[".profile {\r\n\tpadding: 20px;\r\n\tmin-height: 100%;\r\n\twidth: 100%;\r\n}\r\n"]}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://./routes/404/style.css"],"names":[],"mappings":"AAAA,aAEC,eAAgB,CADhB,YAAa,CAEb,UACD,CAMA,qCACE,YACF","file":"route-404.chunk.b9bdb.css","sourcesContent":[".home {\r\n\tpadding: 20px;\r\n\tmin-height: 100%;\r\n\twidth: 100%;\r\n}\r\n\r\n.cardHeader {\r\n  padding: 16px;\r\n}\r\n\r\n.cardBody {\r\n  padding: 16px;\r\n}\r\n"]}
