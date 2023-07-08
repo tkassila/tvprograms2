@@ -182,7 +182,7 @@ export default class HtmlRadioPlayerRoute extends Component {
 				
 		return ( 
 			<div class={style.cardHeader}>
-			<h1 tabIndex="0" >Avaa alla oelvasta linkistä radioplay viereiseen välilehteen:</h1>
+			<h1 tabIndex="0" >Avaa alla olevasta linkistä radioplay viereiseen välilehteen:</h1>
 
 			<div  tabIndex="0" class={style.cardBody}><div><a target="_blank" href='https://www.radioplayer.fi' >Avaa radioplay</a></div>
 
