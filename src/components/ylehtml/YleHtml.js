@@ -2503,9 +2503,11 @@ export default class YleHtml extends Component {
               >
                 <label for="rradio">Radio</label>
               </input>
+
               <label for="rradio" style={inputw}>
                 Radio
               </label>
+
             </div>
             <section
               ref={this.sectionRef}

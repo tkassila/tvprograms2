@@ -626,14 +626,6 @@ export default class App extends Component {
                 themevalue={state.themevalue}
               />
               
-              <AmppariRoute
-                type="text/partytown"
-                path="/amppari"
-                store={this.store}
-                ref={this.ctrlAmppariRef}
-                themevalue={state.themevalue}
-              />
-
               <YleRoute
                 type="text/partytown"
                 path="/"
@@ -657,7 +649,15 @@ export default class App extends Component {
   }
 }
 
-/*    <Header
+/*               <AmppariRoute
+                type="text/partytown"
+                path="/amppari"
+                store={this.store}
+                ref={this.ctrlAmppariRef}
+                themevalue={state.themevalue}
+              />
+
+<Header
             selectedRoute={state.currentUrl}  
             store={this.store}
             currentProgsourceCntrl={state.currentProgsourceCntrl}

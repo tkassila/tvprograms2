@@ -91,14 +91,7 @@ function Header(props){
             >
               Telkku html
             </a>
-            <a 
-              tablndex="0"
-              id="radio_amppari"
-              className={curr_route === "/amppari" ? style.active : null}
-              href="/amppari"
-            >
-              Amppari Tv
-            </a>
+
             <a 
               tablndex="0"
               id="radio_htmlamppari"
@@ -116,7 +109,16 @@ function Header(props){
 }
 
 /*
-            <Link
+            <a 
+              tablndex="0"
+              id="radio_amppari"
+              className={curr_route === "/amppari" ? style.active : null}
+              href="/amppari"
+            >
+              Amppari Tv
+            </a>
+
+<Link
               tablndex="0"
               id="radio_yle"
               activeClassName={style.active}
