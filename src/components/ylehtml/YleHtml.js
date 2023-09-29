@@ -930,6 +930,11 @@ export default class YleHtml extends Component {
     let nodeMainContent = null;
     //nodeMainContent = xmlDoc.evaluate('div[class="main-content"]', xmlDoc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
     let nodeBody = xmlDoc.querySelector("body");
+    if (Config.bDebug)
+    {
+      console.log("nodeBody");
+      console.log(nodeBody.outerHTML);
+    }
     nodeMainContent = nodeBody.querySelector('div[class="main-content"]');
     //let nodeChannels = nodeMainContent.evaluate('//*/attribute::*[class="guide-channels guide-channels--today"]', nodeMainContent, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
     let nodeLu = nodeMainContent.querySelector("ul");
@@ -2488,6 +2493,23 @@ export default class YleHtml extends Component {
               <label id="idyleprogramdatasource" lang="fi">
                 Tv tai radio-ohjelmat
               </label>
+
+              <input
+                type="radio"
+                tabIndex="0"
+                id="rtv"
+                name="opttv"
+                role="radio"
+                style={inputw}
+                checked={state.progsource === "rtv"}
+                aria-checked={state.progsource === "rtv"}
+                value="rtv"
+                onChange={this.radioProgSourceChanged}
+              />
+              <label for="rtv" style={inputw}>
+                Tv
+              </label>
+
 
               <input
                 type="radio"

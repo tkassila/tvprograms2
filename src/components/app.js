@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV==='development') {
+  // Must use require here as import statements are only allowed
+  // to exist at top-level.
+  require("preact/debug");
+}
+
 import { h, Component, createRef, render } from "preact";
 import { route, Router } from 'preact-router';
 // import { Route, Router } from "wouter-preact";
