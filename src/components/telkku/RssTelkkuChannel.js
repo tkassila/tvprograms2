@@ -13,7 +13,7 @@ function RssTelkkuChannel(props)
         let displayitems = null;
         /*
         	jsonitem.title = item.getElementsByTagName("title")[0].childNodes[0].nodeValue;
-		jsonitem.description = item.getElementsByTagName("description")[0].childNodes[0].nodeValue;
+		jsonitem.descripprogs && tion = item.getElementsByTagName("description")[0].childNodes[0].nodeValue;
 		jsonitem.pubdate = item.getElementsByTagName("pubDate")[0].childNodes[0].nodeValue;
 		jsonitem.link =
         */

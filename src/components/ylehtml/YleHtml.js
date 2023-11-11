@@ -2460,6 +2460,21 @@ export default class YleHtml extends Component {
     console.log("before YleHtml render return");
 
     /*
+                  <input
+                type="radio"
+                tabIndex="0"
+                id="rtv"
+                name="opttv"
+                role="radio"
+                style={inputw}
+                checked={state.progsource === "rtv"}
+                aria-checked={state.progsource === "rtv"}
+                value="rtv"
+                onChange={this.radioProgSourceChanged}
+              />
+              <label for="rtv" style={inputw}>
+                Tv
+              </label>
 
               <input
                 type="radio"
@@ -2493,23 +2508,6 @@ export default class YleHtml extends Component {
               <label id="idyleprogramdatasource" lang="fi">
                 Tv tai radio-ohjelmat
               </label>
-
-              <input
-                type="radio"
-                tabIndex="0"
-                id="rtv"
-                name="opttv"
-                role="radio"
-                style={inputw}
-                checked={state.progsource === "rtv"}
-                aria-checked={state.progsource === "rtv"}
-                value="rtv"
-                onChange={this.radioProgSourceChanged}
-              />
-              <label for="rtv" style={inputw}>
-                Tv
-              </label>
-
 
               <input
                 type="radio"
