@@ -1,3 +1,4 @@
+rm ./proxyserver.zip
 rm -R proxyserver/public/*
 preact build  --no-prerender $*
 #npm run build --no-prerender $*
