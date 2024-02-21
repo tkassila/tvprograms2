@@ -236,7 +236,7 @@ export default class Telkku extends Component {
   }
 
   fetchRssTelkkuChannel = async (channelnumber) => {
-    let channelurl = this.fetch_url_telkku + channelnumber;
+     let channelurl = this.fetch_url_telkku + channelnumber; // +this.getFetchDateValue();
     if (Config.bDebug) {
       console.log("fetchRssTelkkuChannel 1");
       console.log(channelurl);
@@ -954,6 +954,19 @@ export default class Telkku extends Component {
     if (days < 10) days = "0" + days;
     if (month < 10) month = "0" + month;
     const ret = "" + days + "." + month + "." + year;
+    return ret;
+  };
+
+  getFetchDateValue = () => {
+    const today = this.state.today;
+    if (today == null || today == undefined) return "";
+
+    let days = today.getDate();
+    let month = today.getMonth() + 1;
+    let year = today.getFullYear();
+    if (days < 10) days = "0" + days;
+    if (month < 10) month = "0" + month;
+    const ret = "/" +year +month + days;
     return ret;
   };
 

@@ -59,22 +59,6 @@ function Header(props){
           <nav>
             <h1>Tv- ja radio-ohjelmat</h1>
             <space> </space>
-            <a tablndex="0"
-              id="radio_yle"
-              className={curr_route === "/" ? style.active : null}
-              href="/"
-            >
-              Yle
-            </a>   
-            <a 
-              tablndex="0"
-              id="radio_player"
-              className={curr_route === "/radioplayer" ? style.active : null}
-              href="/radioplayer"
-        
-            >
-              Radio Player
-            </a>
             <a 
               tablndex="0"
               id="radio_telkku"
@@ -83,6 +67,16 @@ function Header(props){
             >
               Telkku
             </a>
+            
+            <a 
+              tablndex="0"
+              id="radio_player"
+              className={curr_route === "/radioplayer" ? style.active : null}
+              href="/radioplayer"
+        
+            >
+              Radio Player
+            </a>       
             <a 
               tablndex="0"
               id="radio_telkkuhtml"
@@ -109,6 +103,15 @@ function Header(props){
 }
 
 /*
+
+    <a tablndex="0"
+              id="radio_yle"
+              className={curr_route === "/" ? style.active : null}
+              href="/"
+            >
+              Yle
+            </a>   
+
             <a 
               tablndex="0"
               id="radio_amppari"

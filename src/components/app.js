@@ -632,15 +632,6 @@ export default class App extends Component {
                 themevalue={state.themevalue}
               />
               
-              <YleRoute
-                type="text/partytown"
-                path="/"
-                store={this.store}
-                ref={this.ctrlYleRef}
-                themevalue={state.themevalue}
-                innerWidth_change={state.innerWidth_change}
-              />
-
               <HtmlRadioPlayerRoute
                 path="/radioplayer"
                 store={this.store}
@@ -655,7 +646,18 @@ export default class App extends Component {
   }
 }
 
-/*               <AmppariRoute
+/*       
+
+             <YleRoute
+                type="text/partytown"
+                path="/"
+                store={this.store}
+                ref={this.ctrlYleRef}
+                themevalue={state.themevalue}
+                innerWidth_change={state.innerWidth_change}
+              />
+
+              <AmppariRoute
                 type="text/partytown"
                 path="/amppari"
                 store={this.store}
