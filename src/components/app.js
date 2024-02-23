@@ -312,7 +312,7 @@ export default class App extends Component {
         ret = "/htmlamppari";
         break;
       default:
-        ret = "/yle";
+        ret = "/telkku";
         break;
     }
     return ret;
@@ -626,6 +626,7 @@ export default class App extends Component {
               />  
 
               <TelkkuRoute
+                default 
                 path="/telkku"
                 store={this.store}
                 ref={this.ctrlTelkkuRef}
@@ -638,7 +639,14 @@ export default class App extends Component {
                 ref={this.ctrlHtmlRadioPlayerRef}
                 themevalue={state.themevalue}
               />  
-          
+
+              <TelkkuRoute
+                default 
+                store={this.store}
+                ref={this.ctrlTelkkuRef}
+                themevalue={state.themevalue}
+              />
+
           </Router>
         </div>
         
