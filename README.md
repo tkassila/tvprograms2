@@ -2,6 +2,10 @@
   
 Finnish tv programs from different sources, v 2.0, which has smaller application size, than v. 1.5 on tvprograms repository.
 
+New versions of this application
+
+Some resources of tv and radio programs has moved out from this application, because data is unavailable. And some new has come into it.
+
 This app is showing finnish tv and radio programs on a browser from different sources. To get json or xml data from servers, it is calling local proxy node server (on port 9090). You can show also descriptions and search a text from channels or programs. The app is also working with screenreaders.
 It has two page theme: white and black. It is using bigger fonts.
 
