@@ -121,6 +121,7 @@ export default class Header extends Component {
           document.body.classList.remove("mdc-theme--dark");
           this.store.setState({ darkstyle: "" });
           this.props.themeChange("");
+         import("../AppBackgroundWhite.css");
           /*
 					if (this.switchChange && this.switchChange.current 
 						&& this.switchChange.current.checked)

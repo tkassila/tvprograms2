@@ -1,0 +1,383 @@
+    
+import {Component, h } from 'preact';
+// import { useState } from 'preact/hooks';
+//import Chips from 'preact-material-components/Chips';
+//import 'preact-material-components/Chips/style.css';
+//import 'preact-material-components/Theme/style.css';
+//import LayoutGrid from 'preact-material-components/LayoutGrid';
+//import 'preact-material-components/LayoutGrid/style.css';
+
+import Config from '../../utils/Config';
+import YleChannel from './YleChannel';
+
+// import { useState, useEffect  } from 'preact/hooks';
+// import Config from '../util/Config';
+//import CssDark from '../context/Context';
+
+/**
+ * This Address function is showing a programgrid or -list.
+ */
+// class Address extends Component 
+class DayServices extends Component
+{
+
+  constructor(props)
+	{
+		super(props);
+    if(Config.bDebug) 
+		{
+			console.log("DayServices.js");
+			console.log("props");
+			console.log(props);
+		}
+
+    let cdate = new Date(props.currentDate);
+    this.state = {
+			currentDate: cdate,
+      programs: [],
+      services: props.data,
+      progsource: props.progsource,
+      bShowTableBorder: props.bShowTableBorder,
+      selectedcategory: props.selectedcategory,
+      bShowDesciption: props.bShowDesciption,
+    }
+
+    if (Config.bDebug)
+    {
+      console.log("programs");
+      console.log(this.state.programs);
+      console.log("services");
+      console.log(this.state.services);
+    }
+    // this.prevDate = this.prevDate.bind(this);
+    this.nextDate = this.nextDate.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) 
+  {
+    if (Config.bDebug)
+    {
+      console.log("DayGrid componentWillReceiveProps nextProps"); 
+      console.log(nextProps); 				
+    }
+
+    if (nextProps.selecteddate != this.props.selecteddate
+      || nextProps.progsource != this.props.progsource
+      || nextProps.selectedcategory != this.props.selectedcategory
+      || nextProps.bShowDesciption !== this.props.bShowDesciption)
+    this.setState({ selecteddate: nextProps.selecteddate,
+      progsource: nextProps.progsource,
+      selectedcategory: nextProps.selectedcategory,
+      bShowDesciption: nextProps.bShowDesciption,
+     });
+          /*
+    if (nextProps.editErrMsg != null)
+      this.setState({ errmsg: nextProps.editErrMsg});
+    else
+    if (!nextProps.tabClassHide)
+      this.initializeState(nextProps);
+          //	this.forceUpdate();            
+          */
+  }
+
+  componentDidMount()
+	{
+		if(Config.bDebug) 				
+			console.log("DayServices componentDidMount 1");
+	//	this.abortController = new AbortController(); // 1        
+	//	this.abortSignal = this.abortController.signal; // 2	
+	}
+    
+  getDayPrograms = (cdate, programs) =>
+  {
+    console.log("getDayPrograms");
+    return programs;
+  }
+
+  getDayServices = (cdate, progsource, services) =>
+  {
+    console.log("getDayServices");
+    let channelType = 'TVChannel';
+    if (progsource === 'rtv')
+      channelType = 'TVChannel';
+    else
+    if(progsource === 'rradio')
+        channelType = 'RadioChannel';
+    else
+    if (progsource === 'rareena')
+      channelType = 'OndemandServic';
+
+    console.log("channelType");
+    console.log(channelType);
+    console.log("services");
+    console.log(services);
+
+    if (services === undefined || services === null)
+      return null;
+    let ret = services.filter( (s) => s.type.includes(channelType));
+    if (ret != null && ret.length > 0)
+      ret = ret.map((s, i) => { 
+        switch(s.id)
+        {
+          case 'yle-tv1':
+            s.picture = 'yle-tv1_vtc.png';
+            break;
+          case 'yle-tv2':
+              s.picture = 'yle-tv2_vtc.png';
+              break;
+          case 'yle-teema':
+             s.picture = 'yle-teema_vt.png';
+             break;
+          case 'yle-fem':
+              s.picture = 'yle-teema-fem_vt.png';
+              break;
+          case 'tv-finland':
+                s.picture = 'tv-finland_vt.png';
+                break;
+          case 'yle-hd':
+               // s.picture = '';
+                break;
+          case 'tv-finland':
+                s.picture = 'tv-finland_vt.png';
+                break;
+          case 'yle-radio-1':
+                s.picture = 'yle-radio-1_vtc.png';
+                break;
+          case 'yle-puhe':
+                s.picture = 'yle-puhe_vtx.png';
+                break;
+          case 'yle-mondo':
+                s.picture = 'yle-mondo_vtx.png';
+                break;
+          case 'ylex':
+                s.picture = 'ylex_vtx.png';
+                break;
+          case 'yle-x3m':
+                s.picture = 'yle-x3m_vtx.png';
+                break;
+          case 'yle-radio-vega':
+              //  s.picture = '';
+                break;
+          case 'radio-vega-huvudstadsregione':
+              //  s.picture = '';
+                break;
+          case 'radio-vega-vastnyland':
+               // s.picture = '';
+                break;
+          case 'radio-vega-aboland':
+               // s.picture = '';
+                break;
+          case 'radio-vega-osterbotten':
+               // s.picture = '';
+                break;
+          case 'radio-vega-ostnyland':
+               // s.picture = '';
+                break;
+          case 'radio-vega-osterbotten':
+               // s.picture = '';
+                break;
+          case 'yle-radio-suomi':
+               // s.picture = '';
+                break;
+          case 'yle-radio-suomi-lappeenranta':
+              //  s.picture = '';
+                break;
+          case 'yle-radio-suomi-mikkeli':
+               // s.picture = '';
+                break;
+          case 'yle-radio-suomi-kajaani':
+               // s.picture = '';
+                break;
+          case 'yle-radio-suomi-kotka':
+               // s.picture = '';
+                break;
+          case 'yle-radio-suomi-laht':
+              //  s.picture = '';
+                break;
+          case 'yle-radio-suomi-rovaniemi':
+               // s.picture = '';
+                break;
+          case 'yle-radio-suomi-oulu':
+               // s.picture = '';
+                break;
+          case 'yle-radio-suomi-pohjanmaa':
+                 // s.picture = '';
+                  break;
+          case 'yle-radio-suomi-joensuu':
+                 // s.picture = '';
+                  break;
+          case 'yle-radio-suomi-hameenlinn':
+                 // s.picture = '';
+                  break;
+          case 'yle-radio-suomi-kokkola':
+                 // s.picture = '';
+                  break;
+          case 'yle-radio-suomi-jyvaskyla':
+                 // s.picture = '';
+                  break;
+          case 'yle-radio-suomi-kemi':
+                //  s.picture = '';
+                  break;
+          case 'yle-radio-suomi-kuopio':
+                 // s.picture = '';
+                  break;
+          case 'yle-radio-suomi-pori':
+                 // s.picture = '';
+                  break;
+          case 'yle-radio-suomi-tampere':
+                 // s.picture = '';
+                  break;
+          case 'yle-radio-suomi-turku':
+                 // s.picture = '';
+                  break;
+          case 'yle-sami-radio':
+                  s.picture = 'yle-sami-radio_vtc.png';
+                  break;
+          case 'yle-radio-suomi-helsinki':
+                  s.picture = 'yle-radio-suomi-helsinki_vtc.png';
+                  break;
+          case 'yle-klassinen':
+                  s.picture = 'yle-klassinen_vtc.png';
+                  break;
+          case 'elavan-arkiston-nettiradio':
+                 // s.picture = '';
+                  break;
+          case 'yle-areena':
+                  s.picture = 'yle-areena_vt.png';
+                  break;
+          case 'yle-elava-arkisto':
+                //  s.picture = '';
+                  break;
+          case 'yle-teema-fem':
+                  s.picture = 'yle-teema-fem_vt.png';
+                  break;
+                                                                                                                                               
+           default: ;
+          break;
+        }
+        return s;
+      })
+    console.log("ret");
+    console.log(ret);
+
+    return ret;
+  }
+
+  prevDate = () => { 
+      let cdata = this.state.currentDate;
+      cdata.setDate(cdata.getDate() - 1);
+      this.setState({currentDate: cdata });
+      console.log(this.state.currentDate);
+  }
+
+  nextDate() { 
+    let cdata = this.state.currentDate;
+    cdata.setDate(cdata.getDate() + 1);
+    this.setState({currentDate: cdata });
+    console.log(this.state.currentDate);
+  }
+
+  getTableHeadersAndTableRowsAfterServices = () =>
+  {
+     const schedules = this.state.schedules;
+     let ctrlservices = [];
+    // Array.from(services).forEach(s => {
+      //  ctrlservices
+    // });
+    console.log("schedules");
+    console.log(schedules);
+
+    let ret = {};
+    ret.headers = [];
+    ret.channels = [];
+    if (services != null)
+    {
+      ret.headers = schedules.map((s, i) => {
+          return s.name;
+      });
+
+      let tmp_channels = schedules.map((s2, i) => {
+        return <YleChannel data={s2} selectedcategory={this.props.selectedcategory} 
+                  progsource={this.props.progsource} 
+                  selecteddate={this.props.selecteddate}
+        />;
+      }); 
+      ret.channels = tmp_channels;
+    }
+    return ret;
+  }
+
+  render(props, state)
+  {
+    if (Config.bDebug)
+    {
+      console.log("DayServices render");
+      console.log(state);
+    }
+    
+    let tableBorderStyle = '';
+		if (state.bShowTableBorder)
+			tableBorderStyle = ' border: 1px solid black;';
+
+    let tableheaders = null;
+    let tabletds = null;
+    let headers = null;
+    let channels = null;
+    if (state.services != null)
+    {     
+        let channels = null;
+        headers = state.services.map((s, i) => { 
+          return s.name; 
+        });
+        let tmp_channels = state.services.map((s2, k) => {
+          return <YleChannel id={k} data={s2.name} schedules={s2.channelprograms}
+                  selectedcategory={this.props.selectedcategory} 
+                  yleapiparams={this.props.yleapiparams} progsource={this.props.progsource} 
+                  selecteddate={this.props.selecteddate} bSvLang={this.props.bSvLang}
+                  bShowDesciption={state.bShowDesciption} />;
+        }); 
+        if (headers != null)
+          tableheaders = headers.map((child, i) => {
+            return <th style={'vertical-align: top; padding-left: 5px; padding-right: 5px;' +tableBorderStyle}>{child}</th>
+        });
+        if (tmp_channels != null)
+          tabletds = tmp_channels.map((child, k) => {
+            return <td style={'vertical-align: top; padding-left: 5px; padding-right: 5px; ' +tableBorderStyle}>{child}</td> 
+          });
+        /*
+        const tableheaders_and_rows = this.getTableHeadersAndTableRowsAfterServices();
+        headers = tableheaders_and_rows.headers; 
+        if (headers != null)
+          tableheaders = headers.map((child, i) => {
+            return <th style={'vertical-align: top; padding-left: 5px; padding-right: 5px;' +tableBorderStyle}>{child}</th>
+        });
+        channels = tableheaders_and_rows.channels;
+        tabletds = channels;
+        if (channels != null)
+          tabletds = channels.map((child, i) => {
+            return <td style={'vertical-align: top; padding-left: 5px; padding-right: 5px; ' +tableBorderStyle}>{child}</td> 
+          });
+          */
+      }
+    /*
+    let servicesCells = null;
+    if (state.services != null)
+      servicesCells = state.services.map((s, i) => {
+       return <LayoutGrid.Cell cols="1">{s.title.fi !== undefined ? s.title.fi : s.title.sv}</LayoutGrid.Cell>
+    });
+    */
+
+    return( <div>
+      <div class=" mdc-typography--caption">-- Ohjelmataulukko</div>
+      <table style="width:100%">
+      <tbody>
+      <tr>{tableheaders}</tr>
+      <tr>{tabletds}</tr> 		
+      </tbody>
+      </table>
+  </div>
+    );
+  }
+}
+
+export default DayServices;

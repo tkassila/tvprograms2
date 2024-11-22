@@ -1,0 +1,193 @@
+.App {
+  text-align: center;
+  background-color: black;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+html {
+	background-color: black;	
+}
+
+body {
+	padding-top: 0px;
+	font: 14px/1.21 'Helvetica Neue',arial;
+	background-color: black;
+}
+
+header {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 56px;
+	background: #2f9c76;
+	line-height: 56px;
+	box-shadow: 0 0 5px white;
+	
+	nav {
+		display: inline-block;
+		padding: 0 10px;
+    }
+  
+	nav a {
+		display: inline-block;
+		padding: 0 10px;
+		color: #FFF;
+		font-size: 18px;
+		font-weight: 300;
+		letter-spacing: 0.10em;
+		text-decoration: none;
+		cursor: pointer;
+		&:hover {
+			background-color: rgba(255,255,255,0.2);
+		}
+	}
+}
+
+input {
+	background: rgb(7, 7, 7);
+	border: 3px solid rgb(133, 118, 118);
+	line-height: 1.3 !important;
+	padding: 5px 10px;
+	font: inherit;
+	font-size: 100%;
+	border-radius: 7px;
+	outline: none;
+	color: whitesmoke;
+	margin-top: 10px;
+	&:focus { border-color: #0f7c56; }
+}
+
+input:focus, button:focus {
+	outline: 5px solid white;  
+  }
+
+section {
+	display: block;
+	margin: 5px auto;
+	padding: 20px;
+	margin-bottom: 0px;
+	margin-top: 40px;
+	width: 100%;
+	color: white;
+	background: black;
+	box-shadow: 0 1px 5px wheat;
+	border-radius: 3px;
+	background-color: black;
+}
+
+.page {
+	min-height: 100%;
+	width: 100%;
+}
+
+/*
+ ul {
+	margin: 0;
+	padding-left: 0;
+}
+*/
+
+label {
+	font-size: 18px;
+}
+
+legend {
+	font-size: 18px;
+}
+
+button {
+	font-size: 20px;
+	color: black;
+}
+
+input::-webkit-input-placeholder {
+    font-size: 18px;
+}
+
+input[type="text"]
+{
+    font-size: 18px;
+}
+
+a {font-size: 16px; color: yellow;}
+
+a:focus {
+	border: 2px solid rgba(36, 39, 219, 0.623);
+	margin: 3px;
+	text-align: center;
+	background: rgb(238, 19, 19);
+	text-decoration: underline;
+	color: white;
+	will-change: background-color;
+}
+
+div {font-size: 16px}
+
+li {font-size: 16px}
+
+li:focus { border: 4px solid rgba(36, 39, 219, 0.623); } 
+
+.error {color: red; background: white; font-size: 16px}
+
+.header {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 56px;
+	padding: 0;
+	background: rgb(190, 181, 206);
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+	z-index: 50;
+}
+
+.political_p {
+	font-size: 22px;
+}
+
+input[type=radio] {
+	border: 2px solid rgba(36, 39, 219, 0.623);
+	margin: 10px;
+}
+
+p {
+	margin: 20px;
+	padding-right: 100px;
+}
+
+section {  
+    border:1px solid black;  
+    padding:15px;  
+    margin:10px;  
+    }  
+    
+	

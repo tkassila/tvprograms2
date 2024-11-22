@@ -1,0 +1,218 @@
+    
+import {h, Fragment, Component, createRef } from 'preact';
+import { useState } from 'preact/hooks';
+//import Chips from 'preact-material-components/Chips';
+//import 'preact-material-components/Chips/style.css';
+import Card from 'preact-material-components/Card';
+import 'preact-material-components/Card/style.css';
+import Dialog from 'preact-material-components/Dialog';
+import 'preact-material-components/Dialog/style.css';
+import 'preact-material-components/Theme/style.css';
+import Button from 'preact-material-components/Button';
+import 'preact-material-components/Button/style.css';
+import 'preact-material-components/Theme/style.css';
+import Formfield from 'preact-material-components/FormField';
+import 'preact-material-components/Checkbox/style.css';
+
+import LayoutGrid from 'preact-material-components/LayoutGrid';
+import 'preact-material-components/LayoutGrid/style.css';
+import dayjs from 'dayjs';
+
+import Config from '../../utils/Config';
+
+/**
+ * This Address function is showing a programgrid or -list.
+ */
+// class Address extends Component 
+class AmppariShowProgram extends Component
+{
+
+    scrollingDlgRef = null;
+    // dot = " height: 25px; width: 25px; background-color: #bbb; border-radius: 50%; display: inline-block;";
+    dot = "border-radius: 50%; width: 10px; height: 10px; padding: 2px; background: #fff; "+
+    " border: 2px solid #000; color: #000; text-align: center; font: 10px Arial, sans-serif;";
+    
+    constructor(props){
+        console.log("AmppariShowProgram.js");
+        super(props);
+        this.state = {
+            count: 0,
+            displaydescription: false,
+            displayAllDescriptions: props.displayAllDescriptions,
+        };
+        this.scrollingDlgRef = createRef();
+        dayjs.locale('fi');
+    }
+
+    increment = () => { this.setState({count: count + 1}); }
+    // You can also pass a callback to the setter
+    decrement = () => { this.setState({count: count - 1}); }
+
+    onClickDisplay = (event) => {     
+        event.preventDefault();   
+   // console.log("onClickDisplay");
+        if (this.state.displayAllDescriptions)
+            return;
+        if (!this.state.displaydescription)
+            this.scrollingDlgRef.current.MDComponent.show();
+        this.setState({displaydescription: ! this.state.displaydescription });
+    }
+
+    onClickDisplayDialog = (event) => {     
+        event.preventDefault();   
+        // console.log("onClickDisplayDialog");
+        if (this.state.displaydescription)
+            this.scrollingDlgRef.current.MDComponent.close();
+        this.setState({displaydescription: ! this.state.displaydescription });
+    }
+
+    componentDidMount()
+	{
+     //   console.log("AmppariShowProgram.js componentDidMount");
+     //   console.log("this.scrollingDlgRef");
+     //   console.log(this.scrollingDlgRef);
+    }
+
+    
+    componentWillReceiveProps(nextProps) 
+	{
+	  if (Config.bDebug)
+	  {
+		console.log("AmppariShowProgram componentWillReceiveProps nextProps"); 
+		console.log(nextProps); 				
+	  }
+
+      this.setState({ displayAllDescriptions: nextProps.displayAllDescriptions,
+        showSearch: (nextProps.showSearch == undefined ? false : nextProps.showSearch),
+            data: nextProps.data,
+					});
+    }
+
+    getTime = (timemillisec) => 
+    {
+        let day = new Date(timemillisec * 1000);
+        let hours = day.getHours();
+        let minutes = day.getMinutes();;
+        if (minutes < 10)
+            minutes = "0" +minutes;
+        if (hours < 10)
+            hours = "0" +hours;
+        return "" +hours+":"+minutes;
+    }
+
+        /*
+        	jsonitem.title = item.getElementsByTagName("title")[0].childNodes[0].nodeValue;
+		jsonitem.description = item.getElementsByTagName("description")[0].childNodes[0].nodeValue;
+		jsonitem.pubdate = item.getElementsByTagName("pubDate")[0].childNodes[0].nodeValue;
+		jsonitem.link =
+
+          <Chips.Chip onClick={onClickDisplay} >
+                    <Chips.Text>{data.title}</Chips.Text></Chips.Chip> : <Chips.Chip onClick={onClickDisplay}>
+                    <Chips.Text>Kissa</Chips.Text></Chips.Chip> }
+
+                     {(!displaydescription ? 
+                <Button tabIndex="0" onClick={onClickDisplay} >
+                    {data.title}</Button> : <Chips.Chip onClick={onClickDisplay}>
+                    <Chips.Text>Kissa</Chips.Text></Chips.Chip>) }
+
+                                 <p>Count: {count}</p>
+            <button onClick={increment}>Increment</button>
+            <button onClick={decrement}>Decrement</button>
+
+                <Chips.Text>{props.data.title}</Chips.Text></Chips.Chip> 
+        */
+
+    openHtmlPage = (event) =>
+    {
+        console.log("openHtmlPage");
+        event.preventDefault();
+        let blankurl = event.target.href;
+        console.log("blankurl");
+        console.log(blankurl);
+       // window.open(blankurl, '_blank', "Ampparissa", "location=no");
+        window.open(blankurl, '_blank', "Ampparissa");
+        return false;
+    }
+
+    getPOfTitleIndex = () =>
+    {
+        console.log("getPOfTitleIndex");
+        
+        let index = this.props.data.titleindex;            
+        console.log("titleindex");
+        console.log(index);
+        let title =  this.props.data.title;
+        if (title != null)
+            title = title.toString();
+        console.log("title");
+        console.log(title);
+        if (index == undefined || index < 0)
+            return title;
+        let ret = this.props.getPOfIndex(index, title);
+        console.log("ret after getPOfIndex");
+        console.log(ret);
+        return ret;
+    }
+
+    getProgramSymbol = () =>
+    {
+        let ret = null;
+        if (this.props.data.movie)
+            ret = <span style={this.dot}>E</span>;
+        else
+        if (this.props.data.sport)
+            ret = <span style={this.dot}>U</span>;
+
+        return ret;
+    }
+
+    // <p><a href={props.data.link} target="_blank" >ohjelmalinkki</a></p>onClik={this.openHtmlPage} linkurl={props.data.link}
+
+    // +this.getPOfTitleIndex()
+    render(props, state) {
+        return (           
+            <div>
+                <div onClick={this.onClickDisplay} >                  
+                <Fragment><p><b>{props.showSearch 
+                        && props.data.titleindex != undefined
+                    ? <div>{this.getProgramSymbol()} {this.getTime(props.data.timestamp)}<space> </space>  
+                     {this.getPOfTitleIndex()}</div> 
+                    : <div>{this.getProgramSymbol()} {this.getTime(props.data.timestamp)}<space> </space> 
+                     {props.data.title.toString()}</div>}</b></p></Fragment>
+                    {state.displayAllDescriptions ? 
+                    <Fragment><p>{ props.showSearch 
+                        && props.data.descriptionindex != undefined
+                        ? props.getPOfIndex(props.data.descriptionindex, 
+                            props.data.description.toString()) 
+                        : props.data.description.toString() }</p>
+                        {props.data.link != undefined || props.data.link != null ?
+                        <p><a href={props.data.link} onClick={this.openHtmlPage} >
+                            ohjelmalinkki</a></p> : null} 
+                        </Fragment> : null}
+                    
+                    <Dialog 
+                               ref={this.scrollingDlgRef}>
+                                <Dialog.Header>{props.channel}</Dialog.Header>
+                                <Dialog.Body scrollable={true}>
+                                  <Card><div class="card-header">
+                                     <h3 class=" mdc-typography--title">
+                                     {this.getProgramSymbol()} {this.getTime(props.data.timestamp)} 
+                                     <space> </space> {props.data.title.toString()}</h3>
+                                     <h3 class=" mdc-typography--title">
+                                         {props.data.description.toString()}</h3><br/>
+                                     </div>
+                                     <Card.Media className="card-media" />
+                                  </Card>
+                                </Dialog.Body>
+                                <Dialog.Footer>
+                                    <Dialog.FooterButton onCancel={this.onClickDisplayDialog} cancel={true} accept={true}>Sulje</Dialog.FooterButton>
+                                </Dialog.Footer>
+                    </Dialog> 
+                    </div>
+            </div>
+
+          );
+   }
+}
+
+export default AmppariShowProgram;

@@ -69,12 +69,23 @@ header {
 			background-color: rgba(255,255,255,0.2);
 		}
 	}
+
+	nav button {
+		color: black;
+		background-color: white;	
+	}
 }
+
+nav_bottom {
+	color: black;
+	background-color: white;
+}
+
 
 input {
 	background: #FFF;
-	border: 3px solid rgb(133, 118, 118);
-	line-height: 1.3 !important;
+	border: 4px solid rgb(133, 118, 118);
+	line-height: 1.4 !important;
 	padding: 5px 10px;
 	font: inherit;
 	font-size: 100%;
@@ -158,10 +169,12 @@ legend {
 
 button {
 	font-size: 20px;
+	color: white;
 }
 
 .button_dark {
 	font-size: 20px;
+	color: white;
 }
 
 input::-webkit-input-placeholder {

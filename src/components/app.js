@@ -277,10 +277,10 @@ export default class App extends Component {
     const bValue = !this.state.themeChange;
     let themeValue = this.state.themevalue;
     if (bValue) {
-      document.body.classList.add("mdc-theme--dark");
+      // document.body.classList.add("mdc-theme--dark");
       themeValue = "--dark";
     } else {
-      document.body.classList.remove("mdc-theme--dark");    
+      // document.body.classList.remove("mdc-theme--dark");    
       themeValue = "";
     }
 
@@ -290,7 +290,12 @@ export default class App extends Component {
       }
     );
     this.store.setState({ darkstyle: themeValue });
-
+    /*
+    if (!bValue) {
+      import('../App.css');
+      import('./App.css');
+    }
+      */
   };
 
   getPathOfRadioProgSourceChanged = (id) => {

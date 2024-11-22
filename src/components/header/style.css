@@ -47,6 +47,16 @@
 	background: rgba(0,0,0,0.4);
 }
 
+.header nav button {
+	color: white;
+	background-color: black;	
+}
+
+.nav_button {
+	color: white;
+	background-color: black;	
+}
+
 o-button_primary {
 	background: rgba(0,0,0,0.4);
 }

@@ -7,6 +7,16 @@
 	color-scheme: light dark;
 	color: #444;
 	background: #fafafa;
+
+	--border-color-white: black;
+	--border-color-dark: white;
+	--border-color: var(--border-color-white);
+}
+	
+mdc-theme--dark :root {
+	--border-color-white: black;
+	--border-color-dark: white;
+	--border-color: var(--border-color-dark);
 }
 
 @media (prefers-color-scheme: dark) {

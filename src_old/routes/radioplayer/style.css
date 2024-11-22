@@ -1,0 +1,33 @@
+.home {
+  padding: 20px;
+  min-height: 100%;
+  width: 100%;
+}
+
+.cardHeader {
+  padding: 16px;
+}
+
+.cardBody {
+  padding: 16px;
+}
+
+.input-w label,
+.input-w input,
+.inputw {
+  float: none;
+  /* if you had floats before? otherwise inline-block will behave differently */
+  display: inline-block;
+  vertical-align: middle;
+}
+
+section {
+  border: 1px solid pink;
+  padding: 15px;
+  margin: 10px;
+}
+
+span {
+  margin-right: 15px;
+  margin-bottom: 5px;
+}

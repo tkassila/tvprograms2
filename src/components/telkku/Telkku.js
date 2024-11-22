@@ -469,7 +469,7 @@ export default class Telkku extends Component {
     if (themevalue === "--dark")
       foundedthtml =
         "background-color: yellow; color: black; margin-right: 0px; margin-left: 0px; padding: 0px;";
-    let newvalue_between = <span style={foundedthtml}>{between}</span>;
+    let newvalue_between = <span tabindex="0" style={foundedthtml}>{between}</span>;
     let newvalue_last =
       last != undefined && last != null && last.trim().length != 0 ? (
         <span style={"margin-right: 0px; margin-left: 0px; padding: 0px;"}>
@@ -1470,6 +1470,7 @@ export default class Telkku extends Component {
                         onKeyUp={this.textFieldChannelsAtSameTimeChanged}
                       />
                     </span>
+                    <br/><br/>
                     <span>
                       <label for="idsearchvalue">
                         Etsi tekstiä ohjelmista:
@@ -1481,20 +1482,19 @@ export default class Telkku extends Component {
                         outlined
                         disabled={state.channels == null || state.bUnderFetch}
                         onKeyUp={this.textFieldSearchChanged}
-                        style={" width: 30%;"}
+                        style={inputw +" width: 30%;"} 
                       />
                     </span>
                     <span>
                       <Button
-                        tabIndex="0"
-                        ripple
-                        raised
-                        style={inputw}
-                        disabled={state.channels == null || state.bUnderFetch}
-                        onClick={this.searchTextFromChannelsClicked}
-                        style={buttoninputw}
-                        aria-label="Hae"
-                        text="Hae"
+                        tabIndex="0" 
+                        ripple 
+                        raised 
+                        disabled={state.channels == null || state.bUnderFetch} 
+                        onClick={this.searchTextFromChannelsClicked} 
+                        style={buttoninputw} 
+                        aria-label="Hae" 
+                        text="Hae" 
                       ></Button>
                     </span>
                     <span>
@@ -1520,18 +1520,7 @@ export default class Telkku extends Component {
                       ></Button>
                     </span>
                     <space> </space>
-                    <span>
-                      <SwitchCheckbox
-                        onChange={this.showTableBorders}
-                        style={inputw}
-                        propref={this.showTableBordersRef}
-                        inputid="checkTableBorders"
-                        labeltext="Näytä taulun raamit"
-                        checked={state.bShowTableBorder}
-                      />
-                    </span>
-                    <space> </space>
-                    <span>
+                    <span>         
                       <Button
                         tabIndex="0"
                         ripple
@@ -1542,6 +1531,18 @@ export default class Telkku extends Component {
                         text="Keskeytä lataus"
                       ></Button>
                     </span>
+                    <br/>
+                    <br/>
+                    <span>
+                      <SwitchCheckbox
+                        onChange={this.showTableBorders}
+                        style={inputw}
+                        propref={this.showTableBordersRef}
+                        inputid="checkTableBorders"
+                        labeltext="Näytä taulun raamit"
+                        checked={state.bShowTableBorder}
+                      />
+                    </span>                 
                   </div>
                 </div>
               </div>
@@ -1558,7 +1559,9 @@ export default class Telkku extends Component {
               <div class=" mdc-typography--caption">
                 <h3 id="idprogramtableh3" tabIndex="0">
                 Ohjelmataulukko&emsp;
+                <span>
                     <Button
+                    tabIndex="0"
                     lang="fi"
                     ripple
                     raised
@@ -1566,9 +1569,9 @@ export default class Telkku extends Component {
                     text={state.hideButtonText}
                     id="buttonHide"
                     onClick={this.buttonHidePressed}
-                    aria-label="Näytä/Piilota teksi"
+                    aria-label="Näytä/Piilota ohjeteksi"
                   ></Button>
-
+                 </span>
                 </h3>
                 <div class={style.cardHeader} id="hideDiv">
                   <h3 lang="fi" tabIndex="0">
