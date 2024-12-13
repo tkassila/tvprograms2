@@ -127,12 +127,13 @@ class PreactDialog extends Component {
         >
           <Dialog.Header lang="fi" tabIndex="0">
             {props.title}
-          </Dialog.Header>
+          </Dialog.Header>       
+
           <Dialog.Body scrollable={true}>
             <Card>
-              <div class="card-header">
+         //     <div class="card-header">
                 {props.children ? props.children : null}
-              </div>
+        //      </div>
               <Card.Media className="card-media" />
             </Card>
           </Dialog.Body>
