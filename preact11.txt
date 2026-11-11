@@ -1,0 +1,3 @@
+Älä aja npm audit fix tai npm audit fix --force: Vanhoissa projekteissa npm audit fix yrittää poistaa varoituksia pakottamalla ikivanhoja paketteja tai tekemällä yhteensopimattomia päivityksiä, mikä rikkoo projektin.
+Preact 10.29.8 on tälle projektille oikea versio: Se on Preact 10:n vakain ja uusin julkaisu, joka toimii nykyisen preact-cli- ja jest-kokoonpanosi kanssa.
+Jos haluat siirtyä Preact 11:een tulevaisuudessa: Build-työkalu kannattaa päivittää moderniin Viteen (@preact/preset-vite) ja korvata Enzyme @testing-
